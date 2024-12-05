@@ -13,15 +13,21 @@ def create_app():
     from .routes.openai_routes import openai_bp
     from .routes.drive_routes import drive_bp
     # from .routes.other_routes import other_bp
+    from .routes.ocr_routes import ocr_bp
+    from .routes.practice_routes import practice_bp
+    from .routes.solution_routes import solution_bp
 
     @app.route('/', methods=['GET'])
     def index():
-        key = os.getenv("OPENAI_API_KEY")
-        print("KEY",key)
-        return 'Connecting...'+"API",str(key)
+        return 'Connecting...'
 
     app.register_blueprint(openai_bp, url_prefix='/api/openai')
     app.register_blueprint(drive_bp, url_prefix='/api/drive')
+
+    # app.register_blueprint(image_blueprint, url_prefix="/api/image")
+    app.register_blueprint(ocr_bp, url_prefix="/api/ocr")
+    app.register_blueprint(practice_bp, url_prefix="/api/practice")
+    app.register_blueprint(solution_bp, url_prefix="/api/solution")
     # app.register_blueprint(other_bp, url_prefix='/api/other')
 
     return app

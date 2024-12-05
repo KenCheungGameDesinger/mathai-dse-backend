@@ -1,0 +1,4 @@
+"url": "127.0.0.1:5000/",
+"url": "127.0.0.1:5000/api/ocr/extract",
+"url": "127.0.0.1:5000/api/practice/generate",
+"url": "127.0.0.1:5000/api/solution/solve",
