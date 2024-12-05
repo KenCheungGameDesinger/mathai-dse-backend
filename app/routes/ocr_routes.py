@@ -1,6 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.openai_service import generate_completion
-from app.services.ocr_service import perform_ocr
+from app.services.ocr_service import ocr_questions, ocr_answers
 
 ocr_bp = Blueprint('ocr', __name__)
 
@@ -15,7 +14,21 @@ def extract():
             return jsonify({"success": False, "error": "image_data: No image data provided."}), 400
 
         # file = request.files['file']
-        extracted_text = perform_ocr(file)
+        extracted_text = ocr_questions(file)
+        return jsonify({"success": True, "text": extracted_text})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+@ocr_bp.route("/extract_answer", methods=["POST"])
+def extract_answer():
+    try:
+        file = request.json.get("image_data", "")
+        if (file == ""):
+            return jsonify({"success": False, "error": "image_data: No image data provided."}), 400
+
+        # file = request.files['file']
+        extracted_text = ocr_answers(file)
         return jsonify({"success": True, "text": extracted_text})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})

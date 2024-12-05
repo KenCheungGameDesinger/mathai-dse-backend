@@ -10,9 +10,8 @@ def create_app():
     # print("key", app.config['OPENAI_API_KEY'])
     # print("key", os.getenv('OPENAI_API_KEY'))
     # 註冊藍圖
-    from .routes.openai_routes import openai_bp
     from .routes.drive_routes import drive_bp
-    # from .routes.other_routes import other_bp
+
     from .routes.ocr_routes import ocr_bp
     from .routes.practice_routes import practice_bp
     from .routes.solution_routes import solution_bp
@@ -21,7 +20,6 @@ def create_app():
     def index():
         return 'Connecting...'
 
-    app.register_blueprint(openai_bp, url_prefix='/api/openai')
     app.register_blueprint(drive_bp, url_prefix='/api/drive')
 
     # app.register_blueprint(image_blueprint, url_prefix="/api/image")

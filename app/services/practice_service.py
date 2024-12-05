@@ -1,3 +1,4 @@
+import json
 import random
 from openai import OpenAI
 import os
@@ -24,10 +25,10 @@ def generate_practice_questions(base_question, num_questions):
                         "the output shouldn't include invisible characters like spaces, tabs, newlines, etc."
                         "response example:"
                         "["
-                                r'"Simplify (m^5 * n^2)^6 / m^4 * n^3",'
-                                r'"Simplify (m^7 * n^2)^6 / m^3 * n^4",'
-                                r'Simplify (m^5 * n^3)^6 / m^5 * n^2'
-                            ']'
+                        r'"Simplify (m^5 * n^2)^6 / m^4 * n^3",'
+                        r'"Simplify (m^7 * n^2)^6 / m^3 * n^4",'
+                        r'Simplify (m^5 * n^3)^6 / m^5 * n^2'
+                        ']'
                     ),
                 }
             ],
@@ -40,4 +41,4 @@ def generate_practice_questions(base_question, num_questions):
         #         variations = output
         #         yield variations
 
-    return variations
+    return json.loads(variations)
