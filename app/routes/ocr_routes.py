@@ -15,7 +15,9 @@ def extract():
 
         # file = request.files['file']
         extracted_text = ocr_questions(file)
-        return jsonify({"success": True, "text": extracted_text})
+        print(extracted_text)
+        data = jsonify({"success": True, "text": extracted_text})
+        return data
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 

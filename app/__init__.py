@@ -24,8 +24,8 @@ def create_app():
 
     # app.register_blueprint(image_blueprint, url_prefix="/api/image")
     app.register_blueprint(ocr_bp, url_prefix="/api/ocr")
-    app.register_blueprint(practice_bp, url_prefix="/api/practice")
     app.register_blueprint(solution_bp, url_prefix="/api/solution")
+    app.register_blueprint(practice_bp, url_prefix="/api/practice")
     # app.register_blueprint(other_bp, url_prefix='/api/other')
 
     return app

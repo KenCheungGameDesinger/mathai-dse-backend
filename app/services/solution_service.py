@@ -14,26 +14,31 @@ def solve_math_problem(latex_equation):
             {
                 "role": "user",
                 "content": (
-                    "Solve the given problem step by step in LaTeX format for expressing mathematics only. "
+                    "Solve the given problem step by step in LaTeX format nested in JSON for expressing mathematics only. "
                     "Use the following structure: "
+                    "- dont add and prefix or suffix to wrap the sentence in a LaTeX and json environment."
+                    r"- every sentence should wrap by exact '\\text{}' but not '\\text{}' in Latex."
+                    "- Do not add any explanatory text outside of LaTeX."
                     "- Wrap all equations in json format. "
                     "- the response json have to include 'topic', 'steps' and 'final answer'"
                     "- topics means the name of the problem in HKDSE mathematics. "
-                    "- steps means the steps to solve the problem. Including instruction for each step. put each single step in to a list."
+                    "- steps means the steps to solve the problem. Including instruction for each step. put each single step in to a list with Latex."
                     "- instructions in step is also in Latex format."
-                    r"- can use '\n' to break line between instructions and equation."
                     "- final answer means the final answer of the problem."
                     "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
                     "- don't add and prefix or suffix to wrap the json."
                     f"Problem: {latex_equation}"  # Dynamically embed the problem
-                    "Example output: "
-                    r"""{'topic': 'Simplify', 'steps': ["\text{...}: \n ..."], 'final answer': 'Simplify (m^5 * n^3)^6 / m^5 * n^2'}"""
+                    "json format example: "
+                    r'{"topic": "Topic", "steps": ["Step 1", "Step 2", "Step 3"], "final answer": "Final Answer"}'
+                    "Latex Example: "
+                    r'\\text{Simplify } \\left( \\frac{m^{5} n^{-2}}{m^{4} n^{-3}} \\right)^{6} \\text{ and express your answer with positive indices.}'
                 )
             }
         ]
     )
 
     response = response.choices[0].message.content
+    # print(response)
     return json.loads(response)
 
 

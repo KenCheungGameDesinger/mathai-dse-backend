@@ -10,7 +10,7 @@ def ocr_questions(image_file):
     client = OpenAI(api_key=API_KEY)
     # img = client.images.analyze(url=image_file, feature_types=['text'])
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o",
         messages=[
             {
                 "role": "user",
@@ -22,10 +22,12 @@ def ocr_questions(image_file):
                             "Use the following structure: "
                             "- place the sentence in one line."
                             "- dont add and prefix or suffix to wrap the sentence in a LaTeX environment."
-                            r"- every sentence should wrap by exact '\text{}' but not '\\text{}' in Latex."
+                            r"- every sentence should wrap by exact '\text{}' in Latex, no double slash."
+                            "Latex should be have single slash."
                             "- Do not add any explanatory text outside of LaTeX."
-                            # "Example output: "
-                            # r"\text{Simplify } \frac{(m^{5}n^{-2})^{6}}{m^{4}n^{-3}} \text{ and express your answer with positive indices.}"
+                            "Latex format: "
+                            r"- response in latex should use '\text{}' in Latex."
+                            r"- dont use double-slash to wrap the sentence in Latex."
                         )
                     },
                     {
@@ -37,7 +39,7 @@ def ocr_questions(image_file):
         ],
     )
     response = response.choices[0].message.content
-    # print(response)
+    print(response)
     return response
 
 
@@ -46,7 +48,8 @@ def ocr_answers(image_file):
     client = OpenAI(api_key=API_KEY)
     # img = client.images.analyze(url=image_file, feature_types=['text'])
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
+        model="gpt-4o",
+        temperature=0.1,
         messages=[
             {
                 "role": "user",
@@ -61,6 +64,7 @@ def ocr_answers(image_file):
                             "- student might copy the question on top, but dont include it."
                             "- steps means the middle steps that student write. Including his sentence for each step. put each single step in to a list."
                             r"- Sentence in step is also in Latex format, the format should be display with mathquill, e.g. text: \text{},but dont use $"
+                            r"every text in json value should wrap '\text{...} in LaTex"
                             "- final answer means the final answer written by student."
                             "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
                             "- don't add and prefix or suffix to wrap the json."
@@ -75,5 +79,5 @@ def ocr_answers(image_file):
         ],
     )
     response = response.choices[0].message.content
-    # print(response)
+    print(response)
     return json.loads(response)
