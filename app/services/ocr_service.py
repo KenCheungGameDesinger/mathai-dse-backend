@@ -22,7 +22,10 @@ def ocr_questions(image_file):
                             "Use the following structure: "
                             "- place the sentence in one line."
                             "- dont add and prefix or suffix to wrap the sentence in a LaTeX environment."
+                            r"- every sentence should wrap by exact '\text{}' but not '\\text{}' in Latex."
                             "- Do not add any explanatory text outside of LaTeX."
+                            # "Example output: "
+                            # r"\text{Simplify } \frac{(m^{5}n^{-2})^{6}}{m^{4}n^{-3}} \text{ and express your answer with positive indices.}"
                         )
                     },
                     {

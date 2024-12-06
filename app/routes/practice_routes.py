@@ -9,10 +9,9 @@ practice_bp = Blueprint("practice", __name__)
 def generate():
     try:
         base_question = request.json["base_question"]
-        num_questions = request.json.get("num_questions", 5)
 
-        questions = generate_practice_questions(base_question, num_questions)
-        print(questions)
+        questions = generate_practice_questions(base_question)
+        # print(questions)
         # questions = ""
         # for question in generate_practice_questions(base_question, num_questions):
         #     questions += question

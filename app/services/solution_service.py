@@ -21,12 +21,13 @@ def solve_math_problem(latex_equation):
                     "- topics means the name of the problem in HKDSE mathematics. "
                     "- steps means the steps to solve the problem. Including instruction for each step. put each single step in to a list."
                     "- instructions in step is also in Latex format."
+                    r"- can use '\n' to break line between instructions and equation."
                     "- final answer means the final answer of the problem."
                     "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
                     "- don't add and prefix or suffix to wrap the json."
                     f"Problem: {latex_equation}"  # Dynamically embed the problem
                     "Example output: "
-                    "{'topic': 'Simplify', 'steps': ['Simplify (m^5 * n^2)^6 / m^4 * n^3', 'Simplify (m^7 * n^2)^6 / m^3 * n^4', 'Simplify (m^5 * n^3)^6 / m^5 * n^2'], 'final answer': 'Simplify (m^5 * n^3)^6 / m^5 * n^2'}"
+                    r"""{'topic': 'Simplify', 'steps': ["\text{...}: \n ..."], 'final answer': 'Simplify (m^5 * n^3)^6 / m^5 * n^2'}"""
                 )
             }
         ]
