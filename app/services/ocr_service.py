@@ -1,8 +1,19 @@
 # import pytesseract
 import json
-
+from pydantic import BaseModel, Field
 from openai import OpenAI
 import os
+
+from typing import List
+
+
+class Step(BaseModel):
+    text: str = Field(..., description=r"LaTeX formatted text, e.g. \text{This is a step}")
+
+
+class OCRResponse(BaseModel):
+    steps: List[Step] = Field(..., description="List of steps, each with LaTeX formatted text")
+    final_answer: str = Field(..., description="Final answer in LaTeX syntax, e.g. \text{The final answer is 42}")
 
 
 def ocr_questions(image_file):
@@ -43,13 +54,15 @@ def ocr_questions(image_file):
     return response
 
 
+# 如果不准確，使用gpt-4o模型
 def ocr_answers(image_file):
     API_KEY = os.getenv("OPENAI_API_KEY")
     client = OpenAI(api_key=API_KEY)
     # img = client.images.analyze(url=image_file, feature_types=['text'])
-    response = client.chat.completions.create(
-        model="gpt-4o",
-        temperature=0.1,
+    response = client.beta.chat.completions.parse(
+        model="gpt-4o-mini",
+        temperature=0,
+        response_format=OCRResponse,
         messages=[
             {
                 "role": "user",
@@ -57,17 +70,21 @@ def ocr_answers(image_file):
                     {
                         "type": "text",
                         "text": (
-                            "Extract the text or mathematical answer from the image in LaTeX format only. "
-                            "Use the following structure: "
-                            "- Wrap all equations in json format. "
-                            "- the response json have to include 'steps' and 'final_answer'"
-                            "- student might copy the question on top, but dont include it."
-                            "- steps means the middle steps that student write. Including his sentence for each step. put each single step in to a list."
-                            r"- Sentence in step is also in Latex format, the format should be display with mathquill, e.g. text: \text{},but dont use $"
-                            r"every text in json value should wrap '\text{...} in LaTex"
-                            "- final answer means the final answer written by student."
-                            "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
-                            "- don't add and prefix or suffix to wrap the json."
+                            'Extract the answer in LaTeX format only.Return as a JSON with two keys:'
+                            '- "steps": List of LaTeX-formatted steps; wrap sentences with `\text{}`.'
+                            '- "final_answer": The final LaTeX answer.'
+                            'Exclude the question if copied.Respond with JSON only, no extra text.'
+                            # "Extract the text or mathematical answer from the image in LaTeX format only. "
+                            # "Use the following structure: "
+                            # "- Wrap all equations in json format. "
+                            # "- the response json have to include 'steps' and 'final_answer'"
+                            # "- student might copy the question on top, but dont include it."
+                            # "- steps means the middle steps that student write. Including his sentence for each step. put each single step in to a list."
+                            # r"- Sentence in step is also in Latex format, the format should be display with mathquill, e.g. text: \text{},but dont use $"
+                            # r"every text in json value should wrap '\text{...} in LaTex"
+                            # "- final answer means the final answer written by student."
+                            # "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
+                            # "- don't add and prefix or suffix to wrap the json."
                         )
                     },
                     {
@@ -79,5 +96,4 @@ def ocr_answers(image_file):
         ],
     )
     response = response.choices[0].message.content
-    print(response)
     return json.loads(response)
