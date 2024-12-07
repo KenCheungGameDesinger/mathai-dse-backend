@@ -60,7 +60,7 @@ def ocr_answers(image_file):
     client = OpenAI(api_key=API_KEY)
     # img = client.images.analyze(url=image_file, feature_types=['text'])
     response = client.beta.chat.completions.parse(
-        model="gpt-4o-mini",
+        model="gpt-4o",
         temperature=0,
         response_format=OCRResponse,
         messages=[
