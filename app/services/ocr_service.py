@@ -8,7 +8,9 @@ from typing import List
 
 
 class Step(BaseModel):
-    text: str = Field(..., description=r"LaTeX formatted text, e.g. \text{This is a step}")
+    text: str = Field(..., description=(r"LaTeX formatted text, e.g. \text{This is a step}."
+                                        "The student's solution step, expressed explicitly. "
+                                        r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"))
 
 
 class OCRResponse(BaseModel):
@@ -73,7 +75,6 @@ def ocr_answers(image_file):
                             'Extract the answer in LaTeX format only.Return as a JSON with two keys:'
                             '- "steps": List of LaTeX-formatted steps; wrap sentences with `\text{}`.'
                             '- "final_answer": The final LaTeX answer.'
-                            'Exclude the question if copied.Respond with JSON only, no extra text.'
                             # "Extract the text or mathematical answer from the image in LaTeX format only. "
                             # "Use the following structure: "
                             # "- Wrap all equations in json format. "
