@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
-import os
+
+from app.managers.firebase.firestoreManager import db_instance
 
 
 def create_app():
@@ -9,6 +10,7 @@ def create_app():
     # 加載配置
 
     app.config.from_object('app.config.Config')
+
     # print("key", app.config['OPENAI_API_KEY'])
     # print("key", os.getenv('OPENAI_API_KEY'))
     # 註冊藍圖

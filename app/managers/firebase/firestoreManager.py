@@ -3,18 +3,21 @@ from firebase_admin import credentials, firestore
 from typing import Any, Dict, List, Optional
 
 
-# 初始化 Firebase
-def initialize_firebase(service_account_path: str):
-    """Initialize Firebase using the provided service account path."""
-    cred = credentials.Certificate(service_account_path)
-    firebase_admin.initialize_app(cred)
-    print("Firebase initialized successfully!")
-
-
 # Firestore 通用管理庫
 class FirestoreManager:
-    def __init__(self):
+    def __init__(self, path="service_account_key.json"):
+        # 初始化 Firestore
+        self.cred = credentials.Certificate(path)
+        self.app = firebase_admin.initialize_app(self.cred)
+        # print("Firebase initialized successfully!")
         self.db = firestore.client()
+        print("Firestore initialized successfully!")
+
+    # def initialize_firebase(service_account_path: str):
+    #     """Initialize Firebase using the provided service account path."""
+    #     cred = credentials.Certificate(service_account_path)
+    #     firebase_admin.initialize_app(cred)
+    #     print("Firebase initialized successfully!")
 
     # 添加單個文檔
     def add_document(self, collection_name: str, document_data: Dict[str, Any], document_id: Optional[str] = None):
@@ -163,11 +166,12 @@ class FirestoreManager:
         batch.commit()
         return {"success": True, "message": "Batch documents deleted successfully."}
 
+db_instance = FirestoreManager("service_account_key.json")
 
 # 示例代碼
 # if __name__ == "__main__":
 #     # 初始化 Firebase
-#     service_account_path = "path_to_serviceAccountKey.json"
+#     service_account_path = "service_account_key.json"
 #     initialize_firebase(service_account_path)
 #
 #     # 初始化 Firestore 管理器
