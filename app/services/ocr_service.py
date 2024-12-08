@@ -7,14 +7,13 @@ import os
 from typing import List
 
 
-class Step(BaseModel):
-    text: str = Field(..., description=(r"LaTeX formatted text, e.g. \text{This is a step}."
-                                        "The student's solution step, expressed explicitly. "
-                                        r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"))
-
-
 class OCRResponse(BaseModel):
-    steps: List[Step] = Field(..., description="List of steps, each with LaTeX formatted text")
+    steps: List[str] = Field(..., description=("List of steps, each with LaTeX formatted text"
+                                               "Inside the steps:"
+                                               r"LaTeX formatted text, e.g. \text{This is a step}."
+                                               "The student's solution step, expressed explicitly. "
+                                               r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
+                                               ))
     final_answer: str = Field(..., description="Final answer in LaTeX syntax, e.g. \text{The final answer is 42}")
 
 
