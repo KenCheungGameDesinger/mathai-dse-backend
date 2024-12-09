@@ -6,7 +6,7 @@ from app.managers.firebase.firestoreManager import db_instance
 
 def create_app():
     app = Flask(__name__)
-    CORS(app)
+    CORS(app, resources={r"/*": {"origins": "*"}})
     # 加載配置
 
     app.config.from_object('app.config.Config')
