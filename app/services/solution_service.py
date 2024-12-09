@@ -79,9 +79,9 @@ class EvaluateOutput(BaseModel):
     )
 
 
-def evaluate_student_answer(steps, final_answer):
+def evaluate_student_answer(question, steps, final_answer):
     prompt = (
-        "For each student step comment whether correct or not, and command if not correct showing why incorrect and showing right steps. "
+        "For each student step comment whether correct or not for answering the question, and command if not correct showing why incorrect and showing right steps. "
         "For correct comment showing remind about what student easy to fall in incorrect. "
         # "Use the following structure: "
         # r"- Wrap all equations in json format"
@@ -109,7 +109,7 @@ def evaluate_student_answer(steps, final_answer):
                 },
                 {
                     "role": "user",
-                    "content": json.dumps({"steps": steps, "answer": final_answer})
+                    "content": json.dumps({"question": question, "steps": steps, "answer": final_answer})
                 }
             ]
         )

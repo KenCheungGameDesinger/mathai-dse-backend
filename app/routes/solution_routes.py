@@ -19,13 +19,15 @@ def solve():
 @solution_bp.route("/evaluate", methods=["POST"])
 def evaluate():
     try:
+
         steps = request.json.get("steps", "")
         final_answer = request.json.get("final_answer", "")
+        question = request.json.get("question", "")
         if (steps == ""):
             return jsonify({"success": False, "error": "steps: No steps provided."}), 400
         if (final_answer == ""):
             return jsonify({"success": False, "error": "answer: No answer provided."}), 400
-        evaluation = evaluate_student_answer(steps, final_answer)
+        evaluation = evaluate_student_answer(question,steps, final_answer)
         return jsonify({"success": True, "evaluation": evaluation})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
