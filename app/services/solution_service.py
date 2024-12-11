@@ -77,6 +77,12 @@ class EvaluateOutput(BaseModel):
             "Each evaluation includes the step's correctness and feedback."
         )
     )
+    final_answer: bool = Field(
+        ...,
+        description=(
+            r"return true if student final answer is correct for answering the question"
+        )
+    )
 
 
 def evaluate_student_answer(question, steps, final_answer):
