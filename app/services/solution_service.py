@@ -64,8 +64,10 @@ class StepEvaluation(BaseModel):
         description=(
             "Feedback for the given step. For incorrect steps, the comment explains why it is incorrect and provides the correct process. "
             "For correct steps, the comment highlights common mistakes to watch out for."
-            "Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
-            r"use '\\' to break line for beginning of a mathematical equation e.g. '=' or end of text with ':'"
+            r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
+            r"use '\newline' to break line for separating text sentences and math equation."
+            r"\\text{This step is incorrect because it does not relate to the original question.} \\newline \\text{You should start with the expression } \\newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
+
         )
     )
 
@@ -76,6 +78,8 @@ class EvaluateOutput(BaseModel):
         description=(
             "A list of evaluations corresponding to each step in the student's solution. "
             "Each evaluation includes the step's correctness and feedback."
+            r"use '\newline' to break line for beginning of a mathematical equation e.g. '=' or end of text with ':'"
+            "don't make sentence with math equation in one line"
         )
     )
     final_answer: bool = Field(
