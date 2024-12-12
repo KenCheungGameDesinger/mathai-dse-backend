@@ -65,6 +65,7 @@ class StepEvaluation(BaseModel):
             "Feedback for the given step. For incorrect steps, the comment explains why it is incorrect and provides the correct process. "
             "For correct steps, the comment highlights common mistakes to watch out for."
             "Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
+            r"use '\\' to break line for beginning of a mathematical equation e.g. '=' or end of text with ':'"
         )
     )
 

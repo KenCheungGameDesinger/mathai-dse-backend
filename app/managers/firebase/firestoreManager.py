@@ -5,7 +5,7 @@ from typing import Any, Dict, List, Optional
 
 # Firestore 通用管理庫
 class FirestoreManager:
-    def __init__(self, path="service_account_key.json"):
+    def __init__(self, path="service_account_key_generative_exam.json"):
         # 初始化 Firestore
         self.cred = credentials.Certificate(path)
         self.app = firebase_admin.initialize_app(self.cred)
@@ -166,12 +166,13 @@ class FirestoreManager:
         batch.commit()
         return {"success": True, "message": "Batch documents deleted successfully."}
 
-db_instance = FirestoreManager("service_account_key.json")
+# db_instance = FirestoreManager("service_account_key_generative_exam.json")
+db_instance = FirestoreManager("service_account_key_metamersive.json")
 
 # 示例代碼
 # if __name__ == "__main__":
 #     # 初始化 Firebase
-#     service_account_path = "service_account_key.json"
+#     service_account_path = "service_account_key_generative_exam.json"
 #     initialize_firebase(service_account_path)
 #
 #     # 初始化 Firestore 管理器

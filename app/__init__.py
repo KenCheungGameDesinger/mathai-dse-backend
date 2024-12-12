@@ -11,6 +11,8 @@ def create_app():
 
     app.config.from_object('app.config.Config')
 
+    # print(db_instance.add_document("users", {"name": "Alice", "age": 25, "email": "alice@example.com"}, "user_1"))
+
     # print("key", app.config['OPENAI_API_KEY'])
     # print("key", os.getenv('OPENAI_API_KEY'))
     # 註冊藍圖

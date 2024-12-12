@@ -22,6 +22,7 @@ def generate_practice_questions(base_question):
                     f"Original Problem: {base_question}"  # Dynamically embed the problem
                     r"output pure strings, don't add any prefix or suffix"
                     r"- every sentence should wrap by exact'\text{}' in Latex, but not '\\text{}'."
+                    r"\text{} should not wrap with Latex math."
                     "- output should include online value without key"
                     # "no need to add escape slashes"
                     "the output shouldn't include invisible characters like spaces, tabs, newlines, etc."
