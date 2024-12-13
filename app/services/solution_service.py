@@ -53,7 +53,8 @@ class StepEvaluation(BaseModel):
     step: str = Field(
         ...,
         description=(
-            "The student's solution step, expressed explicitly. "
+            # "The student's solution step, expressed explicitly. "
+            "The correct solution step for answering question"
             r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
         )
     )
@@ -67,11 +68,11 @@ class StepEvaluation(BaseModel):
     comment: str = Field(
         ...,
         description=(
-            "Feedback for the given step. For incorrect steps, the comment explains why it is incorrect and provides the correct process. "
+            r"if step is incorrect, comment the common mistakes with pure sentence wrap by \\text{}, no math in comment "
             "For correct steps, the comment highlights common mistakes to watch out for."
             r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
-            r"use '\newline' to break line for separating text sentences and math equation."
-            r"\\text{This step is incorrect because it does not relate to the original question.} \\newline \\text{You should start with the expression } \\newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
+            # r"use '\newline' to break line for separating text sentences and math equation."
+            r"\\text{This step is incorrect because it does not relate to the original question. You should start with the expression: }"
 
         )
     )
