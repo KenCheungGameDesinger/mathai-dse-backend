@@ -8,11 +8,14 @@ from typing import List
 
 
 class OCRResponse(BaseModel):
-    steps: List[str] = Field(..., description=("List of steps, each with LaTeX formatted text"
+    steps: List[str] = Field(..., description=("List of steps, each with LaTeX formatted"
                                                "Inside the steps:"
-                                               r"LaTeX formatted text, e.g. \text{This is a step}."
+                                               "must directly express the student's solution step"
+                                               "if there is no text, then no need to add"
                                                "The student's solution step, expressed explicitly. "
                                                r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
+                                               "every steps should only have one '=' equal symbol."
+                                               "steps is recognition from image to text"
                                                ))
     final_answer: str = Field(..., description="Final answer in LaTeX syntax, e.g. \text{The final answer is 42}")
 
@@ -72,7 +75,7 @@ def ocr_answers(image_file):
                         "type": "text",
                         "text": (
                             'Extract the answer in LaTeX format only.Return as a JSON with two keys:'
-                            '- "steps": List of LaTeX-formatted steps; wrap sentences with `\text{}`.'
+                            '- "steps": List of LaTeX-formatted steps; if there is text, then wrap sentences with `\text{}`.'
                             '- "final_answer": The final LaTeX answer.'
                             # "Extract the text or mathematical answer from the image in LaTeX format only. "
                             # "Use the following structure: "
