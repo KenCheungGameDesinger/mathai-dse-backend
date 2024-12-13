@@ -29,6 +29,9 @@ def solve_math_problem(latex_equation):
                     "- final answer means the final answer of the problem."
                     "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
                     "- don't add and prefix or suffix to wrap the json."
+                    r"use '\newline' to break line for separating text sentences and math equation."
+                    r"\\text{This step is incorrect because it does not relate to the original question.} \\newline \\text{You should start with the expression } \\newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
+                    r"must put '\newline' before each '=' equal sign"
                     f"Problem: {latex_equation}"  # Dynamically embed the problem
                     "json format example: "
                     r'{"topic": "Topic", "steps": ["Step 1", "Step 2", "Step 3"], "final answer": "Final Answer"}'
