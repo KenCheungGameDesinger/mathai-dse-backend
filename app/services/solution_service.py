@@ -55,24 +55,26 @@ class StepEvaluation(BaseModel):
         description=(
             # "The student's solution step, expressed explicitly. "
             "The correct solution step for answering question"
-            r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
+            "Equations should be pure math latex, and every step should start with '='"
+            # r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
         )
     )
     correct: bool = Field(
         ...,
         description=(
-            "A boolean indicating whether the step is correct. "
+            "A boolean indicating whether the step is correct for answering question. "
+            "correct is not only mathematically correct but also related to the original question."
             "`True` if the step is correct, and `False` otherwise."
         )
     )
     comment: str = Field(
         ...,
         description=(
-            r"if step is incorrect, comment the common mistakes with pure sentence wrap by \\text{}, no math in comment "
-            "For correct steps, the comment highlights common mistakes to watch out for."
-            r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
+            r"if step is incorrect for answering question, give pure text explanation with \\text{}"
+            "For correct steps, leave it blank."
+            # r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
             # r"use '\newline' to break line for separating text sentences and math equation."
-            r"\\text{This step is incorrect because it does not relate to the original question. You should start with the expression: }"
+            r"\\text{This step is incorrect because it does not relate to the original question. You should ... the expression: }"
 
         )
     )
@@ -83,9 +85,10 @@ class EvaluateOutput(BaseModel):
         ...,
         description=(
             "A list of evaluations corresponding to each step in the student's solution. "
-            "Each evaluation includes the step's correctness and feedback."
-            r"use '\newline' to break line for beginning of a mathematical equation e.g. '=' or end of text with ':'"
-            "don't make sentence with math equation in one line"
+            "steps is telling what is answer if student is incorrect for questions."
+            # "Each evaluation includes the step's correctness and feedback."
+            # r"use '\newline' to break line for beginning of a mathematical equation e.g. '=' or end of text with ':'"
+            # "don't make sentence with math equation in one line"
         )
     )
     final_answer: bool = Field(
@@ -98,8 +101,17 @@ class EvaluateOutput(BaseModel):
 
 def evaluate_student_answer(question, steps, final_answer):
     prompt = (
-        "For each student step comment whether correct or not for answering the question, and command if not correct showing why incorrect and showing right steps. "
-        "For correct comment showing remind about what student easy to fall in incorrect. "
+        "You are a teacher evaluating a student's solution to a math problem. "
+        "View every single steps of the student's steps and final_answer. "
+        "Student works should answering the question"
+        "You should tell three things in steps:"
+        "- For each step, tell whether is this step correct or not by 'correct':bool"
+        r"- if step is incorrect, put sentence to explain the common mistakes with only \\text{}"
+        "- and the correct solution step for answering question"
+        "- if step is correct, leave comment blank and repeat student steps directly."
+        " Finally, tell whether the final answer is correct or not by 'final_answer':bool"
+        "reply examples: "
+        r"{steps:[{step:string, correct:bool, comment:string}], final_answer:bool}"
         # "Use the following structure: "
         # r"- Wrap all equations in json format"
         # "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
