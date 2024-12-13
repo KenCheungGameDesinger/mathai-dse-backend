@@ -30,11 +30,13 @@ def solve_math_problem(latex_equation):
                     "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
                     "- don't add and prefix or suffix to wrap the json."
                     r"use '\newline' to break line for separating text sentences and math equation."
-                    r"\\text{This step is incorrect because it does not relate to the original question.} \\newline \\text{You should start with the expression } \\newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
-                    r"must put '\newline' before each '=' equal sign"
+                    r"\\text{This step is incorrect because it does not relate to the original question.} \\text{You should start with the expression: } \\newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
+                    "you must follow the habit in hand writing that start new line with each steps and each sentence with ':'"
+                    "you should leave a space after text and before math equation"
+                    # r"must put '\newline' before each '=' equal sign"
                     f"Problem: {latex_equation}"  # Dynamically embed the problem
                     "json format example: "
-                    r'{"topic": "Topic", "steps": ["Step 1", "Step 2", "Step 3"], "final answer": "Final Answer"}'
+                    r'{"final answer": "m^{6} n^{6}","steps": ["\\text{Step 1: Start with the expression} \\newline \\left( \\frac{m^{5} n^{-2}}{m^{4} n^{-3}} \\right)^{6}","\\text{Step 2: Apply the power of a quotient rule} \\newline = \\frac{(m^{5} n^{-2})^{6}}{(m^{4} n^{-3})^{6}}","\\text{Step 3: Simplify the numerators and denominators using the power rule for exponents} \\newline = \\frac{m^{30} n^{-12}}{m^{24} n^{-18}}","\\text{Step 4: Apply the quotient rule for exponents on } m \\text{ and } n \\newline = m^{30-24} n^{-12 - (-18)}","\\text{Step 5: Simplify the exponents} \\newline = m^{6} n^{6}","\\text{Step 6: Write the final answer with positive indices} \\newline = m^{6} n^{6}"],"topic": "Simplifying Expressions with Indices" }'
                     "Latex Example: "
                     r'\\text{Simplify } \\left( \\frac{m^{5} n^{-2}}{m^{4} n^{-3}} \\right)^{6} \\text{ and express your answer with positive indices.}'
                 )
