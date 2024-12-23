@@ -21,6 +21,7 @@ def create_app():
     from .routes.ocr_routes import ocr_bp
     from .routes.practice_routes import practice_bp
     from .routes.solution_routes import solution_bp
+    from .routes.database.question_bank import question_bank_bp
 
     @app.route('/', methods=['GET'])
     def index():
@@ -32,6 +33,8 @@ def create_app():
     app.register_blueprint(ocr_bp, url_prefix="/api/ocr")
     app.register_blueprint(solution_bp, url_prefix="/api/solution")
     app.register_blueprint(practice_bp, url_prefix="/api/practice")
+
+    app.register_blueprint(question_bank_bp, url_prefix="/api/db/question_bank")
     # app.register_blueprint(other_bp, url_prefix='/api/other')
 
     return app

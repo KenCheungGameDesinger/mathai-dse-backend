@@ -15,8 +15,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def solve_math_problem(latex_equation):
     response = client.chat.completions.create(
-        # model="gpt-4o-mini",
-        model="ft:gpt-4o-2024-08-06:exmersive::AhbDUq1W",
+        model="gpt-4o-mini",
+        # model="ft:gpt-4o-2024-08-06:exmersive::AhbDUq1W",
         messages=[
             # {
             #     "role": "user",
@@ -145,11 +145,19 @@ def evaluate_student_answer(question, steps, final_answer):
         "View every single steps of the student's steps and final_answer. "
         "Student works should answering the question"
         "You should tell three things in steps:"
-        "- For each step, tell whether is this step correct or not by 'correct':bool"
-        r"- if step is incorrect, put sentence to explain the common mistakes with only \\text{}"
-        "- and the correct solution step for answering question"
-        "- if step is correct, leave comment blank and repeat student steps directly."
+        "- For each step, tell whether is this student step correct or not by 'correct':bool"
+        r"- if step is incorrect, put the correct steps in 'comment':string"
         " Finally, tell whether the final answer is correct or not by 'final_answer':bool"
+        "criteria for each step:"
+        "- if the step is not related to the original question, then it is incorrect, then the following comment should be the correct steps"
+        "- if the step is related to the original question, and the step is incorrect, then the following comment should be the correct steps"
+        "eventually, student can compare their own steps and correct steps with each other"
+        "Steps logic by Topics:"
+        "- Algebraic Exponents with Rational Expression"
+        "1. Apply exponent rules: Multiply powers in the fraction"
+        "2. Apply quotient rule: Subtract exponents with the same base"
+        "3. Convert negative exponents: Rewrite as positive exponents"
+        "4. Write final answer: Simplify and present in standard form"
         "reply examples: "
         r"{steps:[{step:string, correct:bool, comment:string}], final_answer:bool}"
         # "Use the following structure: "

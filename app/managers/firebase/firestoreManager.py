@@ -1,3 +1,5 @@
+import json
+
 import firebase_admin
 from firebase_admin import credentials, firestore
 from typing import Any, Dict, List, Optional
@@ -33,11 +35,14 @@ class FirestoreManager:
         document_data = {"name": "Alice", "age": 25, "email": "alice@example.com"}
         print(manager.add_document("users", document_data, "user_1"))
         """
+        msg = ""
         if document_id:
             self.db.collection(collection_name).document(document_id).set(document_data)
+            return {"success": True, "document_id": document_id}
         else:
-            self.db.collection(collection_name).add(document_data)
-        return {"success": True, "message": "Document added successfully."}
+            print("adding")
+            doc_ref = self.db.collection(collection_name).add(document_data)
+            return {"success": True, "document_id": doc_ref[1].id}
 
     # 批量添加文檔
     def batch_add_documents(self, collection_name: str, documents: List[Dict[str, Any]]):
@@ -138,13 +143,24 @@ class FirestoreManager:
 
         :param collection_name: Name of the collection containing the document.
         :param document_id: The ID of the document to delete.
-        :return: A dictionary with the success message.
+        :return: A dictionary indicating whether the deletion was successful or if the document was not found.
 
         Example usage:
-        print(manager.delete_document("users", "user_1"))
+        result = manager.delete_document("users", "user_1")
+        print(result)
         """
-        self.db.collection(collection_name).document(document_id).delete()
-        return {"success": True, "message": "Document deleted successfully."}
+        try:
+            # 獲取文檔引用
+            doc_ref = self.db.collection(collection_name).document(document_id)
+            print("deleting")
+            # 檢查文檔是否存在
+            if doc_ref.get().exists:
+                doc_ref.delete()
+                return {"success": True, "message": "Document deleted successfully.", "document_id": document_id}
+            else:
+                return {"success": False, "error": f"Document with ID {document_id} not found."}
+        except Exception as e:
+            return {"success": False, "error": f"An error occurred: {str(e)}"}
 
     # 批量刪除文檔
     def batch_delete_documents(self, collection_name: str, document_ids: List[str]):
@@ -165,6 +181,7 @@ class FirestoreManager:
             batch.delete(doc_ref)
         batch.commit()
         return {"success": True, "message": "Batch documents deleted successfully."}
+
 
 # db_instance = FirestoreManager("service_account_key_generative_exam.json")
 db_instance = FirestoreManager("service_account_key_metamersive.json")
