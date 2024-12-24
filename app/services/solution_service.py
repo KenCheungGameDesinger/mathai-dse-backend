@@ -106,6 +106,10 @@ class StepEvaluation(BaseModel):
             "A boolean indicating whether the step is correct for answering question. "
             "correct is not only mathematically correct but also related to the original question."
             "`True` if the step is correct, and `False` otherwise."
+            "criteria for each step:"
+            "- if the step is not related to the original question, then it is incorrect, then the following comment should be the correct steps"
+            "- if the step can be the step answering the question, and the step is calculating correctly, then the following comment should be the correct steps"
+            "- even the steps is not your expecting steps, but it's right then say this is correct steps"
         )
     )
     comment: str = Field(
@@ -158,6 +162,7 @@ def evaluate_student_answer(question, steps, final_answer):
         "criteria for each step:"
         "- if the step is not related to the original question, then it is incorrect, then the following comment should be the correct steps"
         "- if the step can be the step answering the question, and the step is calculating correctly, then the following comment should be the correct steps"
+        "- even the steps is not your expecting steps, but it's right then say this is correct steps"
         "eventually, student can compare their own steps and correct steps with each other"
         "Steps logic by Topics:"
         "- Algebraic Exponents with Rational Expression"
