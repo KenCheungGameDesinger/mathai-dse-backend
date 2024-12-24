@@ -15,8 +15,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def solve_math_problem(latex_equation):
     response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        # model="ft:gpt-4o-2024-08-06:exmersive::AhbDUq1W",
+        # model="gpt-4o-mini",
+        model="ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi",
         messages=[
             # {
             #     "role": "user",
@@ -131,6 +131,7 @@ class EvaluateOutput(BaseModel):
         description=(
             "A list of evaluations corresponding to each step in the student's solution. "
             "steps is telling what is answer if student is incorrect for questions."
+            "step is telling student what is correct steps for answering question."
             # "Each evaluation includes the step's correctness and feedback."
             # r"use '\newline' to break line for beginning of a mathematical equation e.g. '=' or end of text with ':'"
             # "don't make sentence with math equation in one line"
@@ -139,7 +140,8 @@ class EvaluateOutput(BaseModel):
     final_answer: bool = Field(
         ...,
         description=(
-            r"return true if student final answer is correct for answering the question"
+            r"return true if student final_answer is the solution of the question"
+            "ignore the whether the steps is correct or not"
         )
     )
 
@@ -191,7 +193,11 @@ def evaluate_student_answer(question, steps, final_answer):
                 },
                 {
                     "role": "user",
-                    "content": json.dumps({"question": question, "steps": steps, "answer": final_answer})
+                    "content": (
+                        f"Problem: {question}"
+                        f"Steps: {steps}"
+                        f"Final Answer: {final_answer}"
+                    )
                 }
             ]
         )
