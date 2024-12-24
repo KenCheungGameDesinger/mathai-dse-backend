@@ -112,6 +112,8 @@ class StepEvaluation(BaseModel):
         ...,
         description=(
             r"if step is incorrect for answering question, give pure text explanation with \\text{}"
+            "use strictly Latex format"
+            "use `\\` to put space between text and mathematical expression"
             "For correct steps, leave it blank."
             # r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
             # r"use '\newline' to break line for separating text sentences and math equation."
@@ -151,7 +153,7 @@ def evaluate_student_answer(question, steps, final_answer):
         " Finally, tell whether the final answer is correct or not by 'final_answer':bool"
         "criteria for each step:"
         "- if the step is not related to the original question, then it is incorrect, then the following comment should be the correct steps"
-        "- if the step is related to the original question, and the step is incorrect, then the following comment should be the correct steps"
+        "- if the step can be the step answering the question, and the step is calculating correctly, then the following comment should be the correct steps"
         "eventually, student can compare their own steps and correct steps with each other"
         "Steps logic by Topics:"
         "- Algebraic Exponents with Rational Expression"
@@ -182,7 +184,7 @@ def evaluate_student_answer(question, steps, final_answer):
             temperature=0,
             messages=[
                 {
-                    "role": "user",
+                    "role": "system",
                     "content": prompt
                 },
                 {
