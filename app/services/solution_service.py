@@ -111,13 +111,15 @@ class StepEvaluation(BaseModel):
     comment: str = Field(
         ...,
         description=(
-            r"if step is incorrect for answering question, give pure text explanation with \\text{}"
+            r"if step is incorrect for answering question, give explanation with \\text{}"
+            "and state the correct mathematical expression step in Latex format"
             "use strictly Latex format"
             "use `\\` to put space between text and mathematical expression"
             "For correct steps, leave it blank."
             # r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
             # r"use '\newline' to break line for separating text sentences and math equation."
             r"\\text{This step is incorrect because it does not relate to the original question. You should ... the expression: }"
+            r"\\text{explaination...:} \\newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
 
         )
     )
