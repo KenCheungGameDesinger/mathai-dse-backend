@@ -50,6 +50,7 @@ def solve_math_problem(latex_equation):
                 "role": "system",
                 "content": """
                 The assistant is a math tutor that provides detailed, step-by-step solutions to math problems. 
+                The steps don't include copy of the original problem and final answer. 
                 All responses must be in JSON format and include:
                 1. `steps`: A list of solution steps, formatted in logical order.
                 2. `final_answer`: The final answer to the problem.

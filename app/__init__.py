@@ -1,12 +1,13 @@
 from flask import Flask
-from flask_cors import CORS
+from flask_cors import CORS, cross_origin
 
 from app.managers.firebase.firestoreManager import db_instance
 
 
 def create_app():
     app = Flask(__name__)
-    CORS(app, resources={r"/*": {"origins": "*"}})
+    # CORS(app, resources={r"/*": {"origins": "*"}})
+    CORS(app, origins="*")
     # 加載配置
 
     app.config.from_object('app.config.Config')
