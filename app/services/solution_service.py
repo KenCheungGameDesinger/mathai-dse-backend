@@ -58,6 +58,7 @@ def solve_math_problem(latex_equation):
                 Latex content:
                 - use `\\newline` to before `=` and `:` 
                 - use space between text and mathematical expression: 'text\\'
+                - use `\\text{}` to wrap text, dont "text\ text\ text\"
                 All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
                 Handle invalid or incomplete inputs gracefully by returning an error message in JSON format, explaining the issue.
                 Steps logic by Topics:
