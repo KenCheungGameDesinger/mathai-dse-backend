@@ -123,7 +123,7 @@ class StepEvaluation(BaseModel):
             # r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
             # r"use '\newline' to break line for separating text sentences and math equation."
             r"\\text{This step is incorrect because it does not relate to the original question. You should ... the expression: }"
-            r"\\text{explaination...:} \\newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
+            r"\\text{explaination...:} \newline \\frac{(p^{4}q^{-3})^{5}}{p^{2}q^{-4}}."
 
         )
     )
@@ -217,8 +217,8 @@ def evaluate_student_answer(question, steps, final_answer):
         )
 
         response = response.choices[0].message.content
-        print(type(response))
-        print(response)
+        # print(type(json.loads(response)))
+        # print(json.loads(response))
 
         return json.loads(response)
 
