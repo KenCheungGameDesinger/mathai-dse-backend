@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.solution_service import solve_math_problem,evaluate_student_answer
+from app.services.solution_service import solve_math_problem, evaluate_student_answer
 
 solution_bp = Blueprint("solution", __name__)
 
@@ -16,6 +16,7 @@ def solve():
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
 
+
 @solution_bp.route("/evaluate", methods=["POST"])
 def evaluate():
     try:
@@ -27,7 +28,7 @@ def evaluate():
             return jsonify({"success": False, "error": "steps: No steps provided."}), 400
         if (final_answer == ""):
             return jsonify({"success": False, "error": "answer: No answer provided."}), 400
-        evaluation = evaluate_student_answer(question,steps, final_answer)
-        return jsonify({"success": True, "evaluation": evaluation})
+        evaluation = evaluate_student_answer(question, steps, final_answer)
+        return jsonify({"success": True, "evaluation": evaluation, "model": "gpt-4o-2024-08-06"})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})

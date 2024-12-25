@@ -50,7 +50,7 @@ def solve_math_problem(latex_equation):
                 "role": "system",
                 "content": """
                 The assistant is a math tutor that provides detailed, step-by-step solutions to math problems. 
-                The steps don't include copy of the original problem and final answer. 
+                The steps is not need to repeat the question and dont include final answer. 
                 All responses must be in JSON format and include:
                 1. `steps`: A list of solution steps, formatted in logical order.
                 2. `final_answer`: The final answer to the problem.
@@ -152,48 +152,57 @@ class EvaluateOutput(BaseModel):
 
 def evaluate_student_answer(question, steps, final_answer):
     prompt = (
-        "You are a teacher evaluating a student's solution to a math problem. "
-        "View every single steps of the student's steps and final_answer. "
-        "Student works should answering the question"
-        "You should tell three things in steps:"
-        "- For each step, tell whether is this student step correct or not by 'correct':bool"
-        r"- if step is incorrect, put the correct steps in 'comment':string"
-        " Finally, tell whether the final answer is correct or not by 'final_answer':bool"
-        "criteria for each step:"
-        "- if the step is not related to the original question, then it is incorrect, then the following comment should be the correct steps"
-        "- if the step can be the step answering the question, and the step is calculating correctly, then the following comment should be the correct steps"
-        "- even the steps is not your expecting steps, but it's right then say this is correct steps"
-        "eventually, student can compare their own steps and correct steps with each other"
-        "Steps logic by Topics:"
-        "- Algebraic Exponents with Rational Expression"
-        "1. Apply exponent rules: Multiply powers in the fraction"
-        "2. Apply quotient rule: Subtract exponents with the same base"
-        "3. Convert negative exponents: Rewrite as positive exponents"
-        "4. Write final answer: Simplify and present in standard form"
-        "reply examples: "
-        r"{steps:[{step:string, correct:bool, comment:string}], final_answer:bool}"
-        # "Use the following structure: "
-        # r"- Wrap all equations in json format"
-        # "- Include all steps explicitly in LaTeX with no text outside LaTeX formatting. "
-        # r"- all value in the steps and comment should use Latex format capable"
-        # r"- don't add and header to wrap the json. e.g. ```json"
-        # "- Output for list corresponding each student step comment. "
-        # "- key included: 'step', 'correct', 'comment'"
-        # "your responese should can be parsed by json.loads."
-        # "don't add ```json and ```"
-        # "Example output: "
-        # "[{'step': 'Simplify (m^5 * n^2)^6 / m^4 * n^3', 'correct': True, 'comment': 'Remind: student should be careful about the power of m and n'}, "
-        # "{'step': 'Simplify (m^7 * n^2)^6 / m^3 * n^4', 'correct': False, 'comment': 'Incorrect: the power of m and n are not changed. Right steps are: Simplify (m^5 * n^3)^6 / m^5 * n^2'}, "
-        # r"{'step': 'Simplify (m^5 * n^3)^6 / m^5 * n^2', 'correct': True, 'comment': '...'}]"
+        # "You are a teacher evaluating a student's solution to a math problem. "
+        # "View every single steps of the student's steps and final_answer. "
+        # "Student works should answering the question"
+        # "You should tell three things in steps:"
+        # "- For each step, tell whether is this student step correct or not by 'correct':bool"
+        # r"- if step is incorrect, put the correct steps in 'comment':string"
+        # " Finally, tell whether the final answer is correct or not by 'final_answer':bool"
+        # "criteria for each step:"
+        # "- if the step is not related to the original question, then it is incorrect, then the following comment should be the correct steps"
+        # "- if the step can be the step answering the question, and the step is calculating correctly, then the following comment should be the correct steps"
+        # "- even the steps is not your expecting steps, but it's right then say this is correct steps"
+        # "eventually, student can compare their own steps and correct steps with each other"
+        # "Steps logic by Topics:"
+        # "- Algebraic Exponents with Rational Expression"
+        # "1. Apply exponent rules: Multiply powers in the fraction"
+        # "2. Apply quotient rule: Subtract exponents with the same base"
+        # "3. Convert negative exponents: Rewrite as positive exponents"
+        # "4. Write final answer: Simplify and present in standard form"
+        # "reply examples: "
+        # r"{steps:[{step:string, correct:bool, comment:string}], final_answer:bool}"
+        """
+        You are an evaluator of a student's math solution. Carefully review all the provided steps and the final answer. For each step:
+        - Indicate whether it is correct (`correct`: true/false).
+        - If the step is incorrect, explain why and provide the corrected step (`comment`).
+        
+        **Guidelines**:
+        1. If a step is not logically connected to the problem, mark it incorrect and provide the correct continuation.
+        2. If a step is mathematically valid (even if not your expected approach), mark it correct.
+        3. Only mark a step incorrect if there is a clear mistake in logic, calculation, or relevance to the problem.
+        
+        Finally, evaluate the final answer:
+        - Indicate whether the final answer is correct (`final_answer`: true/false).
+        
+        **Example Output**:
+        ```json
+        {
+          "steps": [
+            {"step": "Step description", "correct": true/false, "comment": "Explanation of correctness or corrections"}
+          ],
+          "final_answer": true/false
+        }
+
+        """
     )
     try:
         response = client.beta.chat.completions.parse(
-            model="gpt-4o-mini",
+            model="gpt-4o-2024-08-06",
             response_format=EvaluateOutput,
-            temperature=0,
             messages=[
                 {
-                    "role": "system",
+                    "role": "user",
                     "content": prompt
                 },
                 {
@@ -208,7 +217,9 @@ def evaluate_student_answer(question, steps, final_answer):
         )
 
         response = response.choices[0].message.content
-        # print(response)
+        print(type(response))
+        print(response)
+
         return json.loads(response)
 
     except Exception as e:
