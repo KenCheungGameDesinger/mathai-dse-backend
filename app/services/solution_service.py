@@ -56,7 +56,7 @@ def solve_math_problem(latex_equation):
                 2. `final_answer`: The final answer to the problem.
                 3. `topic`: Chapter in HKDSE
                 Latex content:
-                - MUST use `\\newline` to before `=` and `:` in calculations
+                - MUST use `\\newline` to before `=` and `:` in beginning and between of calculations
                 - use space between text and mathematical expression: 'text\\'
                 # - use `\\text{}` to wrap text, dont "text\ text\ text\"
                 All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
@@ -121,6 +121,7 @@ class StepEvaluation(BaseModel):
             "use strictly Latex format"
             "use `\\` to put space between text and mathematical expression"
             "For correct steps, leave it blank."
+            "- MUST use `\\newline` to before `=` and `:` in beginning and between of calculations"
             # r"Format the comment using math LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
             # r"use '\newline' to break line for separating text sentences and math equation."
             r"\\text{This step is incorrect because it does not relate to the original question. You should ... the expression: }"
