@@ -15,8 +15,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 def solve_math_problem(latex_equation):
     response = client.chat.completions.create(
-        # model="gpt-4o-mini",
-        model="ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi",
+        model="gpt-4o-mini",
+        # model="ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi",
         messages=[
             # {
             #     "role": "user",
