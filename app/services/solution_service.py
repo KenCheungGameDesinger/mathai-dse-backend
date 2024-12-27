@@ -79,8 +79,7 @@ def solve_math_problem_v2(latex_equation):
         3. `topic`: Chapter in HKDSE
         Latex content:
         - MUST use `\newline` to before `=` and `:` in beginning and between of calculations
-        - use space between text and mathematical expression: 'text\\'
-        # - use `\text{}` to wrap text, dont "text\ text\ text\"
+        - use `\text{}` to wrap text.
         All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
         Handle invalid or incomplete inputs gracefully by returning an error message in JSON format, explaining the issue.
         Steps logic by Topics:
