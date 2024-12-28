@@ -69,14 +69,14 @@ def solve_math_problem(latex_equation):
 
 def solve_math_problem_v2(latex_equation):
     Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
+    #         All responses must be in JSON format and include:
+    #         1. `steps`: A list of solution steps, formatted in logical order.
+    #         2. `final_answer`: The final answer to the problem.
+    #         3. `topic`: Chapter in HKDSE
     prompt = (
         """
         The assistant is a math tutor that provides detailed, step-by-step solutions to math problems. 
         The steps is not need to repeat the question and dont include final answer. 
-        All responses must be in JSON format and include:
-        1. `steps`: A list of solution steps, formatted in logical order.
-        2. `final_answer`: The final answer to the problem.
-        3. `topic`: Chapter in HKDSE
         Latex content:
         - MUST use `\newline` to before `=` and `:` in beginning and between of calculations
         - use `\text{}` to wrap text.
