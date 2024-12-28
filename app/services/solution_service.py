@@ -10,8 +10,8 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 class SolutionModel(BaseModel):
-    steps: List[str] = Field(..., description="List of solution steps in LaTeX format.")
-    final_answer: str = Field(..., description="The final answer in LaTeX format.")
+    steps: List[str] = Field(..., description="List of solution steps in LaTeX format. Not JSON.")
+    final_answer: str = Field(..., description="The final answer in LaTeX format. Not JSON")
 
 def solve_math_problem(latex_equation):
     Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
@@ -81,7 +81,6 @@ def solve_math_problem_v2(latex_equation):
         - MUST use `\newline` to before `=` and `:` in beginning and between of calculations
         - use `\text{}` to wrap text.
         All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
-        Handle invalid or incomplete inputs gracefully by returning an error message in JSON format, explaining the issue.
         Steps logic by Topics:
         - Algebraic Exponents with Rational Expression
         1. Apply exponent rules: Multiply powers in the fraction
