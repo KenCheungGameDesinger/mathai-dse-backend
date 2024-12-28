@@ -19,6 +19,8 @@ class SolutionModel(BaseModel):
         "The final answer is a string in math LaTeX format. Not JSON"
         "inside the final_answer, it should not be a JSON or dictionary, it should be a string in math latex."
     ))
+    topic: str
+
 
 def solve_math_problem(latex_equation):
     Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
