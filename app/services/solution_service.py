@@ -11,12 +11,14 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 class SolutionModel(BaseModel):
     steps: List[str] = Field(..., description=(
-        "List of solution steps in string math LaTeX format. Not JSON."
+        "steps is List of string that solution steps in string math LaTeX format. Not JSON."
+        "Do not include JSON or dictionary in the steps, it should be a list of string in math latex."
         "inside the steps, it should not be a JSON or dictionary, it should be a list of string in math latex."
 
     ))
     final_answer: str = Field(..., description=(
         "The final answer is a string in math LaTeX format. Not JSON"
+        "Do not include JSON or dictionary in the final_answer, it should be a string in math latex."
         "inside the final_answer, it should not be a JSON or dictionary, it should be a string in math latex."
     ))
     topic: str
@@ -77,7 +79,8 @@ def solve_math_problem(latex_equation):
 
 
 def solve_math_problem_v2(latex_equation):
-    Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
+    # Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
+    Model_ID = "gpt-4o-2024-08-06"
     #         All responses must be in JSON format and include:
     #         1. `steps`: A list of solution steps, formatted in logical order.
     #         2. `final_answer`: The final answer to the problem.
