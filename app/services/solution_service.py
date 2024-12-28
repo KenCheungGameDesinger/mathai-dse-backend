@@ -10,8 +10,15 @@ client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
 class SolutionModel(BaseModel):
-    steps: List[str] = Field(..., description="List of solution steps in LaTeX format. Not JSON.")
-    final_answer: str = Field(..., description="The final answer in LaTeX format. Not JSON")
+    steps: List[str] = Field(..., description=(
+        "List of solution steps in string math LaTeX format. Not JSON."
+        "inside the steps, it should not be a JSON or dictionary, it should be a list of string in math latex."
+
+    ))
+    final_answer: str = Field(..., description=(
+        "The final answer is a string in math LaTeX format. Not JSON"
+        "inside the final_answer, it should not be a JSON or dictionary, it should be a string in math latex."
+    ))
 
 def solve_math_problem(latex_equation):
     Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
