@@ -91,8 +91,10 @@ def solve_math_problem_v2(latex_equation):
         The steps is not need to repeat the question and dont include final answer. 
         Latex content:
         - MUST use `\\newline` to before `=` and `:` in **beginning** and between of calculations, NOT **last**; e.g.: `... \newline`=...
-        - dont use `\` at the end of sentence
+        - dont use slashes at the end of sentence for steps
         - use `\text{}` to wrap text.
+        - r"Incorrect: \\text{1. Simplify \\( \\left(\\frac{m^5 n^{-2}}{m^4 n^{-3}}\\right)^6 \\) and express your answer with positive indices}\\"
+        - r"Correct: \\text{1. Simplify } \\left( \\frac{m^5 n^{-2}}{m^4 n^{-3}} \\right)^6 \\text{ and express your answer with positive indices}"
         All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
         Steps logic by Topics:
         - Algebraic Exponents with Rational Expression

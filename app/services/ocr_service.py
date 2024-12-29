@@ -44,7 +44,9 @@ def ocr_questions(image_file):
                             r"- response in latex should use '\text{}' in Latex."
                             r"- dont use double-slash to wrap the sentence in Latex."
                             r" you Must not nest math equation inside `\text{}`"
-                            r"Incorrect: \\text{1. Simplify \\( \\left(\\frac{m^5 n^{-2}}{m^4 n^{-3}}\\right)^6 \\) and express your answer with positive indices}"
+                            r"Incorrect: \\text{1. Simplify \\( \\left(\\frac{m^5 n^{-2}}{m^4 n^{-3}}\\right)^6 \\) and express your answer with positive indices}\\"
+                            r"Incorrect: \\text{Evaluate:} \\int \\frac{2+x}{(1+x)^2} \\, dx"
+                            r"Correct: \\text{Evaluate:} \\int \\frac{2+x}{(1+x)^2} dx"
                             r"Correct: \\text{1. Simplify } \\left( \\frac{m^5 n^{-2}}{m^4 n^{-3}} \\right)^6 \\text{ and express your answer with positive indices}"
                         )
                     },
