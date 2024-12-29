@@ -90,7 +90,8 @@ def solve_math_problem_v2(latex_equation):
         The assistant is a math tutor that provides detailed, step-by-step solutions to math problems. 
         The steps is not need to repeat the question and dont include final answer. 
         Latex content:
-        - MUST use `\newline` to before `=` and `:` in beginning and between of calculations
+        - MUST use `\\newline` to before `=` and `:` in **beginning** and between of calculations, NOT **last**; e.g.: `... \newline`=...
+        - dont use `\` at the end of sentence
         - use `\text{}` to wrap text.
         All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
         Steps logic by Topics:
