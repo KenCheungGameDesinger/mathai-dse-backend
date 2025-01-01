@@ -1,3 +1,5 @@
+import json
+
 from flask import Blueprint, request, jsonify
 
 from app import db_instance
@@ -31,8 +33,8 @@ QUESTION_BANK_COLLECTION = "math-similar-question"
 def get_questionbank_by_topic(topic):
     try:
         questionbank = db_instance.get_collection(QUESTION_BANK_COLLECTION)
-        questionbank = [question for question in db_instance.get_collection(QUESTION_BANK_COLLECTION)
-                        if question.get("solution", {}).get("solution", {}).get("topic") == topic]
-        return jsonify({"success": True, "questions": questionbank or []})
+        questionbank = [question for question in questionbank
+                        if question.get("solution", {}).get("topic") == topic]
+        return jsonify({"success": True, "questions": questionbank})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
