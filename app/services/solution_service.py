@@ -21,7 +21,11 @@ class SolutionModel(BaseModel):
         "Do not include JSON or dictionary in the final_answer, it should be a string in math latex."
         "inside the final_answer, it should not be a JSON or dictionary, it should be a string in math latex."
     ))
-    topic: str
+    topic: str = Field(..., description=("You can only use this topic: "
+                                         "- Algebraic Exponents with Rational Expression"
+                                         "- Rearranging algebraic formulas"
+                                         "- Greatest Common Factor (GCF)"
+                                         ))
 
 
 def solve_math_problem(latex_equation):
@@ -102,7 +106,8 @@ def solve_math_problem_v2(latex_equation):
         2. Apply quotient rule: Subtract exponents with the same base
         3. Convert negative exponents: Rewrite as positive exponents
         4. Write final answer: Simplify and present in standard form
-        - 
+        - Rearranging algebraic formulas
+        - Greatest Common Factor (GCF)
         """
     )
     try:

@@ -1,4 +1,6 @@
 from flask import Blueprint, request, jsonify
+
+from app import db_instance
 from app.services.practice_service import generate_practice_questions
 
 practice_bp = Blueprint("practice", __name__)
@@ -17,5 +19,20 @@ def generate():
         #     questions += question
         #     print(question)
         return jsonify({"success": True, "questions": questions})
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)})
+
+
+QUESTION_BANK_COLLECTION = "math-similar-question"
+
+
+# 取得題庫
+@practice_bp.route("/<topic>", methods=["GET"])
+def get_questionbank_by_topic(topic):
+    try:
+        questionbank = db_instance.get_collection(QUESTION_BANK_COLLECTION)
+        questionbank = [question for question in db_instance.get_collection(QUESTION_BANK_COLLECTION)
+                        if question.get("solution", {}).get("solution", {}).get("topic") == topic]
+        return jsonify({"success": True, "questions": questionbank or []})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})

@@ -1,5 +1,7 @@
 from flask import Blueprint, request, jsonify
 from app.managers.firebase.firestoreManager import db_instance
+import os
+import json
 
 question_bank_bp = Blueprint("question_bank", __name__)
 
@@ -44,23 +46,10 @@ def add_question():
         if "solution" not in data:
             return jsonify({"error": "Missing 'solution' field"}), 400
 
-        # Check each solution field individually
-        # if "steps" not in data["solution"]:
-        #     return jsonify({"error": "Missing 'steps' in 'solution'"}), 400
-
-        # if "final_answer" not in data["solution"]:
-        #     return jsonify({"error": "Missing 'final_answer' in 'solution'"}), 400
-        #
-        # if "topic" not in data["solution"]:
-        #     return jsonify({"error": "Missing 'topic' in 'solution'"}), 400
-        # 檢查 solution 結構是否正確
-        # solution_fields = {"steps", "final_answer", "topic"}
-        # if not solution_fields.issubset(data["solution"].keys()):
-        #     return jsonify({"error": "Invalid 'solution' format"}), 400
-
         # 將數據寫入 Firestore
-        doc_ref = db_instance.add_document(QUESTION_BANK_COLLECTION, data)
-        doc_id = doc_ref.get("document_id")  # 確保返回的鍵名稱清晰一致
+        doc_ref = db_instance.db.collection(QUESTION_BANK_COLLECTION, "reviewing", "questions").add(data)
+
+        doc_id = doc_ref[1].id  # 確保返回的鍵名稱清晰一致
         return jsonify({"message": "Question added successfully", "id": doc_id}), 201
 
     except ValueError as ve:
@@ -90,3 +79,18 @@ def delete_question(document_id):
 
     except Exception as e:
         return jsonify({"error": f"Server error: {str(e)}"}), 500
+
+
+@question_bank_bp.route('/bot', methods=['POST'])
+def get_similar_question():
+    datas = request.get_json()
+    for data in datas:
+        doc_ref = db_instance.add_document("math-similar-question", data)
+    return jsonify({"success": True}), 200
+    # 讀取 similar_question 資料夾中的所有 JSON 檔案
+    #     with open(file, "r") as f:
+    #         data_list = json.load(f)
+    #         for data in data_list:
+    #             # 將數據寫入 Firestore
+    #             print(data)
+    #             # doc_ref = db_instance.add_document("math-similar-question", data)
