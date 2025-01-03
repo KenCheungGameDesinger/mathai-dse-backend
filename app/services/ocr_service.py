@@ -16,6 +16,7 @@ class OCRResponse(BaseModel):
                                                r"Equations should use LaTeX formatting, making the mathematical operations clear. wrap text with '\text{}'"
                                                "every steps should only have one '=' equal symbol."
                                                "steps is recognition from image to text"
+                                               r"if the image include text, then the step should wrap text with '\text{}'"
                                                ))
     final_answer: str = Field(..., description="Final answer in LaTeX syntax, e.g. \text{The final answer is 42}")
 
@@ -80,7 +81,9 @@ def ocr_answers(image_file):
                         "type": "text",
                         "text": (
                             'Extract the answer in LaTeX format only.Return as a JSON with two keys:'
-                            '- "steps": List of LaTeX-formatted steps; if there is text, then wrap sentences with `\text{}`.'
+                            r'- "steps": List of LaTeX-formatted steps; if there is text, then wrap sentences with `\text{}`.'
+                            r"Example: \text{1. Subtract y from both sides: \newline <Latex formula>}"
+                            r"Example: <Latex formula>}"
                             '- "final_answer": The final LaTeX answer.'
                             # "Extract the text or mathematical answer from the image in LaTeX format only. "
                             # "Use the following structure: "
