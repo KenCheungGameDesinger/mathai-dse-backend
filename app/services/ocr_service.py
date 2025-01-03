@@ -50,6 +50,7 @@ def ocr_questions(image_file):
                             r"Incorrect: \\text{Evaluate:} \\int \\frac{2+x}{(1+x)^2} \\, dx"
                             r"Correct: \\text{Evaluate:} \\int \\frac{2+x}{(1+x)^2} dx"
                             r"Correct: \\text{1. Simplify } \\left( \\frac{m^5 n^{-2}}{m^4 n^{-3}} \\right)^6 \\text{ and express your answer with positive indices}"
+                            r"if there is no mathematical problem, return empty string"
                         )
                     },
                     {
