@@ -17,6 +17,7 @@ class OCRResponse(BaseModel):
                                                "every steps should only have one '=' equal symbol."
                                                "steps is recognition from image to text"
                                                r"if the image include text, then the step should wrap text with '\text{}'"
+                                               r"use space `\ ` to separate text and mathematical expression"
                                                ))
     final_answer: str = Field(..., description="Final answer in LaTeX syntax, e.g. \text{The final answer is 42}")
 
