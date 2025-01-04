@@ -208,7 +208,7 @@ def evaluate_student_answer(question, steps, final_answer):
         - If the step is incorrect, explain why and provide the corrected step (`comment`).
         
         **Guidelines**:
-        1. If a step is not logically connected to the problem, mark it incorrect and provide the correct continuation.
+        1. If a step is not logically connected to the problem, mark it incorrect and provide the correct continuation and you must show in comment that "".
         2. If a step is mathematically valid (even if not your expected approach), mark it correct.
         3. Only mark a step incorrect if there is a clear mistake in logic, calculation, or relevance to the problem.
         4. Allow skip steps

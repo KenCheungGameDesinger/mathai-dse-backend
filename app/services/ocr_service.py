@@ -83,6 +83,8 @@ def ocr_answers(image_file):
                         "type": "text",
                         "text": (
                             'Extract the answer in LaTeX format only.Return as a JSON with two keys:'
+                            r"You should only return the exact content of the image in LaTeX format."
+                            r"don't add other content that not showing in image and don't solve it"
                             r'- "steps": List of LaTeX-formatted steps; if there is text, then wrap sentences with `\text{}`.'
                             r"Example: \text{1. Subtract y from both sides: \newline <Latex formula>}"
                             r"Example: <Latex formula>}"
