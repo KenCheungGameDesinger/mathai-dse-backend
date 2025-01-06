@@ -107,7 +107,14 @@ def solve_math_problem_v2(latex_equation):
         3. Convert negative exponents: Rewrite as positive exponents
         4. Write final answer: Simplify and present in standard form
         - Rearranging algebraic formulas
+        1: Isolate the term with the subject in one side
+        2 : Multiply through with -1 to give you a positive equation
+        3: Combine the right-hand side and find a common denomin ator
+        4: Take the reciprocal of both side to solve for subject
         - Greatest Common Factor (GCF)
+        1: Identify difference squares of factor that divides all the terms in an exp ression
+        2: Use the previous factorize answer in exp ression 
+        3: Factor out common terms by grouping
         """
     )
     try:
