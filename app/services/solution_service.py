@@ -115,6 +115,7 @@ def solve_math_problem_v2(latex_equation):
         1: Identify difference squares of factor that divides all the terms in an exp ression
         2: Use the previous factorize answer in exp ression 
         3: Factor out common terms by grouping
+        e.g. question: \\text{Factorize }\\ m^2-4n^2+5m+10n final_answer: (m+2n)(m-2n+5)
         """
     )
     try:
