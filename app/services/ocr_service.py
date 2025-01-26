@@ -6,6 +6,8 @@ import os
 
 from typing import List
 
+from app import client_deepseek, client_openai
+
 
 class OCRResponse(BaseModel):
     steps: List[str] = Field(..., description=("List of steps, each with LaTeX formatted"
@@ -23,10 +25,10 @@ class OCRResponse(BaseModel):
 
 
 def ocr_questions(image_file):
-    API_KEY = os.getenv("OPENAI_API_KEY")
-    client = OpenAI(api_key=API_KEY)
+    # API_KEY = os.getenv("OPENAI_API_KEY")
+    # client = OpenAI(api_key=API_KEY)
     # img = client.images.analyze(url=image_file, feature_types=['text'])
-    response = client.chat.completions.create(
+    response = client_openai.chat.completions.create(
         model="gpt-4o",
         messages=[
             {
@@ -55,7 +57,7 @@ def ocr_questions(image_file):
                     },
                     {
                         "type": "image_url",
-                        "image_url": {"url": image_file}
+                        "image_url": {"url": str(image_file)}
                     },
                 ],
             }

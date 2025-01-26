@@ -1,5 +1,5 @@
 from flask import Blueprint, request, jsonify
-from app.services.solution_service import solve_math_problem, solve_math_problem_v2, evaluate_student_answer
+from app.services.solution_service import solve_math_problem_deepseek, solve_math_problem_openai, evaluate_student_answer
 
 solution_bp = Blueprint("solution", __name__)
 
@@ -11,7 +11,7 @@ def solve():
         latex_equation = request.json.get("question", "")
         if (latex_equation == ""):
             return jsonify({"success": False, "error": "question: No latex equation provided."}), 400
-        solution, model_id = solve_math_problem_v2(latex_equation)
+        solution, model_id = solve_math_problem_deepseek(latex_equation)
         return jsonify({"success": True, "solution": solution, "model": model_id})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})

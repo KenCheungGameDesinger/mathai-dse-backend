@@ -1,8 +1,15 @@
+import os
+
 from flask import Flask
 from flask_cors import CORS, cross_origin
+from openai import OpenAI
 
 from app.managers.firebase.firestoreManager import db_instance
 
+API_KEY_DEEPSEEK = os.getenv("DEEPSEEK_API_KEY")
+API_KEY_OPENAI = os.getenv("OPENAI_API_KEY")
+client_deepseek = OpenAI(api_key=API_KEY_DEEPSEEK, base_url="https://api.deepseek.com")
+client_openai = OpenAI(api_key=API_KEY_OPENAI)
 
 def create_app():
     app = Flask(__name__)

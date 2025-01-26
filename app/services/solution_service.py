@@ -6,6 +6,8 @@ import os
 from pydantic import BaseModel, Field
 from typing import List
 
+from app import client_deepseek
+
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
 
@@ -28,61 +30,79 @@ class SolutionModel(BaseModel):
                                          ))
 
 
-def solve_math_problem(latex_equation):
-    Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
-    # Model_ID = "gpt-4o-mini"
-    response = client.chat.completions.create(
-        model=Model_ID,
-        # model="ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi",
-        messages=[
-            {
-                "role": "system",
-                "content": """
-                The assistant is a math tutor that provides detailed, step-by-step solutions to math problems. 
-                The steps is not need to repeat the question and dont include final answer. 
-                All responses must be in JSON format and include:
-                1. `steps`: A list of solution steps, formatted in logical order.
-                2. `final_answer`: The final answer to the problem.
-                3. `topic`: Chapter in HKDSE
-                Latex content:
-                - MUST use `\\newline` to before `=` and `:` in beginning and between of calculations
-                - use space between text and mathematical expression: 'text\\'
-                # - use `\\text{}` to wrap text, dont "text\\ text\\ text\\"
-                All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
-                Handle invalid or incomplete inputs gracefully by returning an error message in JSON format, explaining the issue.
-                Steps logic by Topics:
-                - Algebraic Exponents with Rational Expression
-                1. Apply exponent rules: Multiply powers in the fraction
-                2. Apply quotient rule: Subtract exponents with the same base
-                3. Convert negative exponents: Rewrite as positive exponents
-                4. Write final answer: Simplify and present in standard form
-                - 
-                """
-            },
-            {
-                "role": "user",
-                "content": (
-                    "response json format example: "
-                    "{{steps:str[], final_answer:str}, topic: str}"
-                    r'{{"final answer": "m^{6} n^{6}","steps": ["\\text{Step 1: Start with the expression} \\newline \\left( \\frac{m^{5} n^{-2}}{m^{4} n^{-3}} \\right)^{6}","\\text{Step 2: Apply the power of a quotient rule} \\newline = \\frac{(m^{5} n^{-2})^{6}}{(m^{4} n^{-3})^{6}}","\\text{Step 3: Simplify the numerators and denominators using the power rule for exponents} \\newline = \\frac{m^{30} n^{-12}}{m^{24} n^{-18}}","\\text{Step 4: Apply the quotient rule for exponents on } m \\text{ and } n \\newline = m^{30-24} n^{-12 - (-18)}","\\text{Step 5: Simplify the exponents} \\newline = m^{6} n^{6}","\\text{Step 6: Write the final answer with positive indices} \\newline = m^{6} n^{6}"],"topic": "Simplifying Expressions with Indices" }}'
-                )},
-            {
-                "role": "user",
-                "content": f"Problem: {latex_equation}"
-            }
-        ]
+def solve_math_problem_deepseek(latex_equation):
+    Model_ID = "deepseek-chat"
+    prompt = (
+        """
+        The assistant is a math tutor that provides detailed, step-by-step solutions to math problems. 
+        The steps is not need to repeat the question and dont include final answer. 
+        Latex content:
+        - MUST use `\\newline` to before `=` and `:` in **beginning** and between of calculations, NOT **last**; e.g.: `... \newline`=...
+        - dont use slashes at the end of sentence for steps
+        - use `\text{}` to wrap text.
+        - r"Incorrect: \\text{1. Simplify \\( \\left(\\frac{m^5 n^{-2}}{m^4 n^{-3}}\\right)^6 \\) and express your answer with positive indices}\\"
+        - r"Correct: \\text{1. Simplify } \\left( \\frac{m^5 n^{-2}}{m^4 n^{-3}} \\right)^6 \\text{ and express your answer with positive indices}"
+        All mathematical expressions must use LaTeX syntax compatible with React-MathQuill. 
+        Steps logic by Topics:
+        - Algebraic Exponents with Rational Expression
+        1. Apply exponent rules: Multiply powers in the fraction
+        2. Apply quotient rule: Subtract exponents with the same base
+        3. Convert negative exponents: Rewrite as positive exponents
+        4. Write final answer: Simplify and present in standard form
+        - Rearranging algebraic formulas
+        1: Isolate the term with the subject in one side
+        2 : Multiply through with -1 to give you a positive equation
+        3: Combine the right-hand side and find a common denomin ator
+        4: Take the reciprocal of both side to solve for subject
+        - Greatest Common Factor (GCF)
+        1: Identify difference squares of factor that divides all the terms in an exp ression
+        2: Use the previous factorize answer in exp ression 
+        3: Factor out common terms by grouping
+        e.g. question: \\text{Factorize }\\ m^2-4n^2+5m+10n final_answer: (m+2n)(m-2n+5)
+        EXAMPLE JSON OUTPUT:
+        {
+            "final_answer": "\\frac{r^{13}}{s^{13}}",
+            "steps": [
+                "\\text{1. Apply exponent rules: } \\left( r^3s^{-2} \\right)^4 \\text{ becomes:} \\newline = r^{3\\cdot4}s^{-2\\cdot4}\\newline = r^{12}s^{-8}",
+                "\\text{2. Combine with the denominator:} \\newline = \\frac{r^{12}s^{-8}}{r^{-1}s^5}",
+                "\\text{3. Apply quotient rule: } \\newline = r^{12-(-1)}s^{-8-5}\\newline = r^{12+1}s^{-8-5}\\newline = r^{13}s^{-13}",
+                "\\text{4. Convert negative exponents: Rewrite as positive indices} \\newline = r^{13}\\cdot\\frac{1}{s^{13}}",
+                "\\text{5. Simplify: } \\newline = \\frac{r^{13}}{s^{13}}"
+            ],
+            "topic": "Algebraic Exponents with Rational Expression"
+        }
+        """
     )
+    try:
+        response = client_deepseek.chat.completions.create(
+            model=Model_ID,
+            response_format={
+                'type': 'json_object'
+            },
+            messages=[
+                {
+                    "role": "user",
+                    "content": prompt
+                },
+                {
+                    "role": "user",
+                    "content": f"Problem: {latex_equation}"
+                }
+            ]
+        )
 
-    response = response.choices[0].message.content
-    response = response.replace("```json", "").replace("```", "")
+        response = response.choices[0].message.content
+        # print(type(json.loads(response)))
+        # print(json.loads(response))
+        response_json = json.loads(response)
+        return response_json, Model_ID
 
-    print(response)
-    response_json = json.loads(response)
-    response_json["raw_response"] = response
-    return response_json, Model_ID
+    except Exception as e:
+        print(e)
+        return str(e)
 
 
-def solve_math_problem_v2(latex_equation):
+def solve_math_problem_openai(latex_equation):
     # Model_ID = "ft:gpt-4o-2024-08-06:exmersive:solve:AheNBEHi"
     Model_ID = "gpt-4o-2024-08-06"
     #         All responses must be in JSON format and include:
