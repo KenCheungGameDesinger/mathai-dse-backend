@@ -7,6 +7,8 @@ import os
 from typing import List
 
 from app import client_deepseek, client_openai
+from app.managers.agents import agent_manager
+
 
 
 class OCRResponse(BaseModel):
@@ -28,6 +30,8 @@ def ocr_questions(image_file):
     # API_KEY = os.getenv("OPENAI_API_KEY")
     # client = OpenAI(api_key=API_KEY)
     # img = client.images.analyze(url=image_file, feature_types=['text'])
+
+    # region
     response = client_openai.chat.completions.create(
         model="gpt-4o",
         messages=[
@@ -41,18 +45,8 @@ def ocr_questions(image_file):
                             "Use the following structure: "
                             "- place the sentence in one line."
                             "- dont add and prefix or suffix to wrap the sentence in a LaTeX environment."
-                            r"- every sentence should wrap by exact '\text{}' in Latex, no double slash."
                             "Latex should be have single slash."
                             "- Do not add any explanatory text outside of LaTeX."
-                            "Latex format: "
-                            r"- response in latex should use '\text{}' in Latex."
-                            r"- dont use double-slash to wrap the sentence in Latex."
-                            r" you Must not nest math equation inside `\text{}`"
-                            r"Incorrect: \\text{1. Simplify \\( \\left(\\frac{m^5 n^{-2}}{m^4 n^{-3}}\\right)^6 \\) and express your answer with positive indices}\\"
-                            r"Incorrect: \\text{Evaluate:} \\int \\frac{2+x}{(1+x)^2} \\, dx"
-                            r"Correct: \\text{Evaluate:} \\int \\frac{2+x}{(1+x)^2} dx"
-                            r"Correct: \\text{1. Simplify } \\left( \\frac{m^5 n^{-2}}{m^4 n^{-3}} \\right)^6 \\text{ and express your answer with positive indices}"
-                            r"if there is no mathematical problem, return empty string"
                         )
                     },
                     {
@@ -64,7 +58,21 @@ def ocr_questions(image_file):
         ],
     )
     response = response.choices[0].message.content
-    print(response)
+    # endregion
+
+    prompt = f"""
+        convert math statement part to validated latex format with text, but dont solve it. dont add additional text.
+        keep the instructions text or objectives of math question.
+        `{response}`
+        
+        Requirement:
+        your response should containt all text and latex.
+        use block mode `$$` containt all the content
+        Example:
+        Simplify <latex> and express the answer...
+        """
+    print("prompt",prompt)
+    response = agent_manager.math_agent.run(prompt)
     return response
 
 

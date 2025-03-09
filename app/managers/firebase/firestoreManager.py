@@ -184,7 +184,7 @@ class FirestoreManager:
 
 
 # db_instance = FirestoreManager("service_account_key_generative_exam.json")
-db_instance = FirestoreManager("service_account_key_metamersive.json")
+db_instance = FirestoreManager(path="service_account_key_metamersive.json")
 
 # 示例代碼
 # if __name__ == "__main__":

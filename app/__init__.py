@@ -6,10 +6,12 @@ from openai import OpenAI
 
 from app.managers.firebase.firestoreManager import db_instance
 
+
 API_KEY_DEEPSEEK = os.getenv("DEEPSEEK_API_KEY")
 API_KEY_OPENAI = os.getenv("OPENAI_API_KEY")
 client_deepseek = OpenAI(api_key=API_KEY_DEEPSEEK, base_url="https://api.deepseek.com")
 client_openai = OpenAI(api_key=API_KEY_OPENAI)
+
 
 def create_app():
     app = Flask(__name__)
@@ -18,6 +20,7 @@ def create_app():
     # 加載配置
 
     app.config.from_object('app.config.Config')
+    app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 限制為 20MB
 
     # print(db_instance.add_document("users", {"name": "Alice", "age": 25, "email": "alice@example.com"}, "user_1"))
 

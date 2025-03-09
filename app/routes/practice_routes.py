@@ -35,6 +35,6 @@ def get_questionbank_by_topic(topic):
         questionbank = db_instance.get_collection(QUESTION_BANK_COLLECTION)
         questionbank = [question for question in questionbank
                         if question.get("solution", {}).get("topic") == topic]
-        return jsonify({"success": True, "questions": questionbank})
+        return jsonify({"success": True, "questions": list(questionbank)})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
