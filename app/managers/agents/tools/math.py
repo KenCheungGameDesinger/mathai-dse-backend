@@ -11,7 +11,7 @@ import json
 from pydantic import BaseModel
 
 # llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="o3-mini", temperature=1)
-llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="ft:gpt-4o-2024-08-06:exmersive:solve-steps:B8rhf1lw", temperature=0.3)
+llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="ft:gpt-4o-2024-08-06:exmersive:solve-steps:B8rhf1lw", temperature=0.1)
 
 
 # region solve solution
@@ -41,6 +41,7 @@ def evaluate_math(question: str, steps: List[str], final_answer: str, sample_ans
         final_answer=final_answer,
         sample_answer=sample_answer
     )
+    print(formatted_prompt)
     res = llm_reasoning.invoke(formatted_prompt)
     return res
 

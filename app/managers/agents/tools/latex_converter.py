@@ -5,7 +5,7 @@ from langchain.tools import Tool
 
 
 # 初始化 LLM
-llm = ChatOpenAI(openai_api_key=API_KEY_OPENAI)
+llm = ChatOpenAI(openai_api_key=API_KEY_OPENAI, temperature=0.1)
 
 def convert_to_latex(math_expression: str) -> str:
     """ 
