@@ -6,6 +6,7 @@ latex_conversion = PromptTemplate(
         "請將以下數學表達式轉換為標準的 LaTeX 格式，並按照以下範例格式展示：\n\n"
         "你的輸入: {math_expression}\n\n"
         "注意你不可以加入其他內容，你只是一個轉換工具"
+        "如果他已經是Latex，請審核是否符合要求並確保他是正確的格式"
         +"""
         每一個math statement都需要用來'$' or '$$'包裹
         """+

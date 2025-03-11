@@ -17,6 +17,32 @@ solve_math = PromptTemplate(
         """)
 )
 
+solve_math_new = PromptTemplate(
+    input_variables=["topic","steps_instruction","question","steps"],
+    template=("""
+As a math expert, you need to provide an extra step for my math problem based on the known topic and known steps. 
+Note that you cannot output two steps at the same time, but rather infer the next step based on the existing steps.
+
+Topic:
+{topic}
+
+Instruction:
+Use following algorithm to solve:
+{steps_instruction}
+
+If you think there are no more steps and you are done, do not add any more steps.
+
+Quesition:
+{question}
+
+existing steps:
+{steps}
+
+Example Output Format:
+{{"step_index": 1, "step": "..."}},
+        """)
+)
+
 evaluate_math = PromptTemplate(
     input_variables=["question", "steps", "final_answer", "sample_answer"],
     template="""

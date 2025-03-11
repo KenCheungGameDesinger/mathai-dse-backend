@@ -190,12 +190,14 @@ def solve_math_problem_agent(latex_equation):
         The steps is not need to repeat the question and dont include final answer. 
         Use Inline Latex format, you can convert any content to latex using tool
         All mathematical expressions must use LaTeX syntax compatible with React. 
-        Steps logic by Topics:
+        
+        Steps Instruction by Topics:
         - Algebraic Exponents with Rational Expression
         1. Apply exponent rules: Multiply powers in the fraction
         2. Apply quotient rule: Subtract exponents with the same base
         3. Convert negative exponents: Rewrite as positive exponents
         4. Write final answer: Simplify and present in standard form
+    
         - Rearranging algebraic formulas
         1: Isolate the term with the subject in one side
         2 : Multiply through with -1 to give you a positive equation
