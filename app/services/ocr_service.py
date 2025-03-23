@@ -33,7 +33,7 @@ def ocr_questions(image_file):
 
     # region
     response = client_openai.chat.completions.create(
-        model="gpt-4o",
+        model="gpt-4-turbo",
         messages=[
             {
                 "role": "user",

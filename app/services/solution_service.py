@@ -184,19 +184,21 @@ def solve_math_problem_openai(latex_equation):
         return str(e)
 
 
-def solve_math_problem_agent(latex_equation):
+def solve_math_problem_agent(latex_equation, topic):
     prompt = f"""
         The assistant is a math tutor that provides detailed, step-by-step solutions to math problems. 
         The steps is not need to repeat the question and dont include final answer. 
         Use Inline Latex format, you can convert any content to latex using tool
         All mathematical expressions must use LaTeX syntax compatible with React. 
         
-        Steps Instruction by Topics:
+        steps_instruction for
         - Algebraic Exponents with Rational Expression
+        ```
         1. Apply exponent rules: Multiply powers in the fraction
         2. Apply quotient rule: Subtract exponents with the same base
         3. Convert negative exponents: Rewrite as positive exponents
         4. Write final answer: Simplify and present in standard form
+        ```
     
         - Rearranging algebraic formulas
         1: Isolate the term with the subject in one side
@@ -208,8 +210,9 @@ def solve_math_problem_agent(latex_equation):
         2: Use the previous factorize answer in expression 
         3: Factor out common terms by grouping
         
-        All you need to do is solve the equation and convert to Latex in Json
+        All you need to do is solve the equation and convert whole step string to valid Latex in Json
         Solve: {latex_equation}
+        Topic: {topic}
         
         Content Optimization:
         - 每個步驟只需要最後的形態，不要只顯示修改的部分
@@ -224,8 +227,7 @@ def solve_math_problem_agent(latex_equation):
         use Json to response:
         {{
             final_answer: string;
-            steps: string[];
-            topic: string;
+            steps: List[str]  # assuming text of step is not wrapped by LaTeX yet, it is just pure text. So dont put `\\n` outside $<latex>$
         }}
         """
 

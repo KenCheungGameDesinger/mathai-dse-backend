@@ -1,26 +1,33 @@
 from langchain.prompts import PromptTemplate
 
-solve_math = PromptTemplate(
-    input_variables=["math_question"],
-    template=("""
-       "你是一位數學專家，請解答以下數學問題：\n\n數學問題：{math_question}\n\n"
-       你的每一個步驟不應該只顯示修改的部分，而需要顯示整個完整的部分作為展示。例如當你簡化一個項的時候，不要忘了展示完整的式子.
-       當你的步驟是修改分子的時候，步驟的展示需要包含分母。
-       而你只需要展示每個步驟的最終形態，而不需要只針對修改的部分單獨顯示。
-       **不要對修改的部分單獨展示。**
-       Output Sample with out ```json and ```:
-       {{
-        final_answer: string;
-        steps: string[];
-        topic: string;
+solve_math_answer = PromptTemplate(
+    input_variables=["math_question","topic"],
+    template=(
+        """
+        You are an AI model specialized in solving mathematical and logical problems. Given a question and relevant topic details, your task is to predict the final answer.  
+        
+        **Question:** {math_question}
+        **Topic:** {topic}
+        
+        Follow these rules:  
+        1. Analyze the question carefully and provide a precise and accurate final answer.  
+        2. Do not include steps, only provide the final answer.  
+        3. The final answer must be in JSON format as follows:  
+        
+        Example Output Format:
+        {{
+          "final_answer": "<your answer here>"
         }}
-        """)
+        
+        """
+    )
 )
 
-solve_math_new = PromptTemplate(
-    input_variables=["topic","steps_instruction","question","steps"],
-    template=("""
-As a math expert, you need to provide an extra step for my math problem based on the known topic and known steps. 
+solve_math_steps = PromptTemplate(
+    input_variables=["topic", "steps_instruction", "question", "final_answer", "steps"],
+    template=(
+        """
+As a math expert, you need to provide an extra step for my math problem based on the known topic and known steps.
 Note that you cannot output two steps at the same time, but rather infer the next step based on the existing steps.
 
 Topic:
@@ -32,15 +39,16 @@ Use following algorithm to solve:
 
 If you think there are no more steps and you are done, do not add any more steps.
 
-Quesition:
+Question:
 {question}
+
+Final Answer:
+{final_answer}
 
 existing steps:
 {steps}
-
-Example Output Format:
-{{"step_index": 1, "step": "..."}},
-        """)
+        """
+    )
 )
 
 evaluate_math = PromptTemplate(
@@ -59,8 +67,10 @@ evaluate_math = PromptTemplate(
     
     **參考答案**
     {sample_answer}
+    
 
     **批改要求**：
+    - 返回的数据需要包含所有学生的步骤
     - 逐步檢查每個步驟是否回答了對應題目，僅僅使用對了rules是不能當做true的 (`correct`: true/false)。
     - 若有錯誤，請提供詳細解釋 (`comment`) 並指導如何修改。
     - 判定最終答案是否正確 (`final_answer`: true/false)。
@@ -76,7 +86,7 @@ evaluate_math = PromptTemplate(
             "final_answer": false,
             "steps": [
                 {{
-                    "step": "Step description",
+                    "step": "Step copy from student steps (學生的解題步驟)",
                     "correct": false,
                     "comment": "Explanation of correctness"
                 }}

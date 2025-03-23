@@ -11,10 +11,12 @@ solution_bp = Blueprint("solution", __name__)
 def solve():
     try:
         latex_equation = request.json.get("question", "")
+        topic = request.json.get("topic", "")
+
         if (latex_equation == ""):
             return jsonify({"success": False, "error": "question: No latex equation provided."}), 400
-        solution = solve_math_problem_agent(latex_equation)
-        data = {"success": True, "solution": solution, "model": "o3-mini"}
+        solution = solve_math_problem_agent(latex_equation, topic)
+        # data = {"success": True, "solution": solution, "model": "o3-mini"}
         return jsonify({"success": True, "solution": solution, "model": "o3-mini"})
     except Exception as e:
         return jsonify({"success": False, "message": str(e)}), 500
@@ -33,7 +35,7 @@ def evaluate():
             return jsonify({"success": False, "error": "steps: No steps provided."}), 400
         if (final_answer == ""):
             return jsonify({"success": False, "error": "answer: No answer provided."}), 400
-        evaluation = evaluate_student_answer_agent(question, steps, final_answer,str(sampleAnswer))
+        evaluation = evaluate_student_answer_agent(question, steps, final_answer, str(sampleAnswer))
         return jsonify({"success": True, "evaluation": evaluation})
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})

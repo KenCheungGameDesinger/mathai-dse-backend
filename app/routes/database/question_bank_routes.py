@@ -1,12 +1,16 @@
 from flask import Blueprint, request, jsonify
 from app.managers.firebase.firestoreManager import db_instance
+from app.config import Config
 import os
 import json
 
+from app.services.question_bank_service import fetch_topics
+
 question_bank_bp = Blueprint("question_bank", __name__)
 
+
 # Firestore 集合名稱
-QUESTION_BANK_COLLECTION = "question_bank"
+# QUESTION_BANK_COLLECTION = "question_bank"
 
 
 @question_bank_bp.route('/', methods=['GET'])
@@ -47,7 +51,7 @@ def add_question():
             return jsonify({"error": "Missing 'solution' field"}), 400
 
         # 將數據寫入 Firestore
-        doc_ref = db_instance.db.collection(QUESTION_BANK_COLLECTION, "reviewing", "questions").add(data)
+        doc_ref = db_instance.db.collection(Config.QUESTION_BANK_COLLECTION, "reviewing", "questions").add(data)
 
         doc_id = doc_ref[1].id  # 確保返回的鍵名稱清晰一致
         return jsonify({"message": "Question added successfully", "id": doc_id}), 201
@@ -67,7 +71,7 @@ def delete_question(document_id):
     """
     try:
         # 嘗試刪除指定文檔
-        result = db_instance.delete_document(QUESTION_BANK_COLLECTION, document_id)
+        result = db_instance.delete_document(Config.QUESTION_BANK_COLLECTION, document_id)
         return_code = 500
         if result["success"]:
             if result["success"]:
@@ -81,11 +85,23 @@ def delete_question(document_id):
         return jsonify({"error": f"Server error: {str(e)}"}), 500
 
 
+@question_bank_bp.route('/topics', methods=['GET'])
+def get_topics():
+    """
+    獲取所有題目主題。
+    """
+    """
+    Flask API，返回 JSON 格式的 topics
+    """
+    data = fetch_topics()  # 調用 service
+    return jsonify(data), (500 if not data["success"] else 200)
+
+
 @question_bank_bp.route('/bot', methods=['POST'])
 def get_similar_question():
     datas = request.get_json()
     for data in datas:
-        doc_ref = db_instance.add_document("math-similar-question", data)
+        doc_ref = db_instance.add_document(Config.QUESTION_BANK_COLLECTION, data)
     return jsonify({"success": True}), 200
     # 讀取 similar_question 資料夾中的所有 JSON 檔案
     #     with open(file, "r") as f:

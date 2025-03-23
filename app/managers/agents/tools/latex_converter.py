@@ -12,7 +12,7 @@ def convert_to_latex(math_expression: str) -> str:
     驗證及轉換數學表達式為標準 LaTeX 格式。
     """
     prompt = conversion_prompt.latex_conversion.format(math_expression=math_expression)
-    return llm.invoke(prompt)
+    return llm.invoke(prompt).content
 
 
 convert_to_latex_tool = Tool(

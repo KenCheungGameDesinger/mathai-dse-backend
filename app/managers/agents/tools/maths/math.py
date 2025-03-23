@@ -13,21 +13,28 @@ from pydantic import BaseModel
 # llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="o3-mini", temperature=1)
 # llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="ft:gpt-4o-2024-08-06:exmersive:solve-steps:B8rhf1lw", temperature=0.1)
 llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI,
-                           model_name="ft:gpt-4o-2024-08-06:exmersive:step-accuracy:B9mdBujp", temperature=0.1)
+                           model_name="ft:gpt-4o-2024-08-06:exmersive:solution-separate:BDyrFobg", temperature=0)
 
 
 # region solve solution
-def solve_math(topic: str, steps_instruction: str, question: str) -> List[str]:
+def solve_math(topic: str, question: str, steps_instruction: Optional[str] = "None specified") -> List[str]:
     """
     解答數學問題
     """
     print("in solve_math")
-    step_list =[]
+    answer_prompt = math.solve_math_answer.format(math_question=question, topic=topic)
+    print("answer prompt", answer_prompt)
+    final_answer = llm_reasoning.invoke(answer_prompt)
+    final_answer = json.loads(json.loads(final_answer.content)).get("final_answer")
+    final_answer = final_answer.replace('\x0c', r'\f')
+    print("final_answer", final_answer)
+    step_list = []
     last_len = 0
     for i in range(5):
-        formatted_prompt = math.solve_math_new.format(topic=topic, steps_instruction=steps_instruction,
-                                                  question=question,
-                                                  steps=step_list)
+        formatted_prompt = math.solve_math_steps.format(topic=topic, steps_instruction=steps_instruction,
+                                                        question=question,
+                                                        final_answer=final_answer,
+                                                        steps=step_list)
         print(formatted_prompt)
         res = llm_reasoning.invoke(formatted_prompt)
         content_str = json.loads(res.content)
@@ -36,12 +43,13 @@ def solve_math(topic: str, steps_instruction: str, question: str) -> List[str]:
         if json.loads(content_str)['step_index'] in step_indices:
             break
         step_list.append(content_str)
+
     return step_list
 
 
 class SolutionMathInput(BaseModel):
     topic: str
-    steps_instruction: str
+    steps_instruction: Optional[str] = ""
     question: str
 
 
@@ -67,7 +75,7 @@ def evaluate_math(question: str, steps: List[str], final_answer: str, sample_ans
     )
     print(formatted_prompt)
     res = llm_reasoning.invoke(formatted_prompt)
-    return res
+    return res.content
 
 
 class EvaluateMathInput(BaseModel):

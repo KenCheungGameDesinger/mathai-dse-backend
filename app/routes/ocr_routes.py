@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 from app.services.ocr_service import ocr_questions, ocr_answers
+from app.services.question_bank_service import match_topic
 
 ocr_bp = Blueprint('ocr', __name__)
 
@@ -15,7 +16,9 @@ def extract():
         # file = request.files['file']
         extracted_text = ocr_questions(file)
         print(extracted_text)
-        data = jsonify({"success": True, "text": extracted_text})
+        topic_matched = match_topic(extracted_text)
+        # match topic
+        data = jsonify({"success": True, "text": extracted_text, "topic": topic_matched})
         return data
     except Exception as e:
         return jsonify({"success": False, "error": str(e)})
