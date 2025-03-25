@@ -15,7 +15,6 @@ def extract():
 
         # file = request.files['file']
         extracted_text = ocr_questions(file)
-        print(extracted_text)
         topic_matched = match_topic(extracted_text)
         # match topic
         data = jsonify({"success": True, "text": extracted_text, "topic": topic_matched})

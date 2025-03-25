@@ -23,11 +23,11 @@ def solve_math(topic: str, question: str, steps_instruction: Optional[str] = "No
     """
     print("in solve_math")
     answer_prompt = math.solve_math_answer.format(math_question=question, topic=topic)
-    print("answer prompt", answer_prompt)
+
     final_answer = llm_reasoning.invoke(answer_prompt)
     final_answer = json.loads(json.loads(final_answer.content)).get("final_answer")
     final_answer = final_answer.replace('\x0c', r'\f')
-    print("final_answer", final_answer)
+
     step_list = []
     last_len = 0
     for i in range(5):
@@ -43,7 +43,17 @@ def solve_math(topic: str, question: str, steps_instruction: Optional[str] = "No
         if json.loads(content_str)['step_index'] in step_indices:
             break
         step_list.append(content_str)
-
+    if len(step_list) > 1:
+        i = 0
+        while i < len(step_list) - 1:
+            if json.loads(step_list[i])["step"] == json.loads(step_list[i+1])["step"]:
+                step_list.pop(i)
+                for j in range(i, len(step_list)):
+                    step = json.loads(step_list[j])
+                    step["step_index"] -= 1
+                    step_list[j] = json.dumps(step)
+            else:
+                i += 1
     return step_list
 
 

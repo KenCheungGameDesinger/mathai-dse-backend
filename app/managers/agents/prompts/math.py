@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 
 solve_math_answer = PromptTemplate(
-    input_variables=["math_question","topic"],
+    input_variables=["math_question", "topic"],
     template=(
         """
         You are an AI model specialized in solving mathematical and logical problems. Given a question and relevant topic details, your task is to predict the final answer.  
@@ -37,7 +37,9 @@ Instruction:
 Use following algorithm to solve:
 {steps_instruction}
 
+Terminate Policy:
 If you think there are no more steps and you are done, do not add any more steps.
+If the maths operation of next step is same as one of the existing steps, do not add any more steps, and return object with {{step_index: 0, step: "" }}
 
 Question:
 {question}
@@ -47,6 +49,12 @@ Final Answer:
 
 existing steps:
 {steps}
+
+Output Format:
+{{
+    "step_index": int,
+    "step:": str
+}}
         """
     )
 )

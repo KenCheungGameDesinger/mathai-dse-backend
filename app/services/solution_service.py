@@ -199,7 +199,6 @@ def solve_math_problem_agent(latex_equation, topic):
         3. Convert negative exponents: Rewrite as positive exponents
         4. Write final answer: Simplify and present in standard form
         ```
-    
         - Rearranging algebraic formulas
         1: Isolate the term with the subject in one side
         2 : Multiply through with -1 to give you a positive equation
@@ -210,21 +209,24 @@ def solve_math_problem_agent(latex_equation, topic):
         2: Use the previous factorize answer in expression 
         3: Factor out common terms by grouping
         
+        hide the instruction when there is no not applicable
+        
         All you need to do is solve the equation and convert whole step string to valid Latex in Json
         Solve: {latex_equation}
         Topic: {topic}
         
         Content Optimization:
-        - 每個步驟只需要最後的形態，不要只顯示修改的部分
-        - 每個步驟需要補充rule的範例，而不是只有rule的名字
+        - 每個步驟只需要跟隨返回的那樣，不要只顯示修改的部分
+        - 每個步驟需要提及使用了什麼rule，和具體的步驟
+        - 最後的2個步驟算式如果相同，請移除一個
         
         Latex Optimization:
+        - Latex語法必須包裹在`$`符號內
         - 最後的輸出必須將解釋性句子和數學表達式之間用latex換行,如：text... $$<math_equation>$$
         - display new line with slash between `=` text and equal sign with math statement
-        e.g: "Combine the results: $$\\therefore\\ \\frac....$$"
         
-        dont add prefix like: ```json and ```
-        use Json to response:
+        dont add text and prefix like: ```json and ```
+        use following structure to output:
         {{
             final_answer: string;
             steps: List[str]  # assuming text of step is not wrapped by LaTeX yet, it is just pure text. So dont put `\\n` outside $<latex>$
