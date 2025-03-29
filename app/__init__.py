@@ -5,7 +5,7 @@ from flask_cors import CORS, cross_origin
 from openai import OpenAI
 
 from app.managers.firebase.firestoreManager import db_instance
-
+from app.routes.report_routes import report_bp
 
 API_KEY_DEEPSEEK = os.getenv("DEEPSEEK_API_KEY")
 API_KEY_OPENAI = os.getenv("OPENAI_API_KEY")
@@ -41,8 +41,9 @@ def create_app():
     app.register_blueprint(ocr_bp, url_prefix="/api/ocr")
     app.register_blueprint(solution_bp, url_prefix="/api/solution")
     app.register_blueprint(practice_bp, url_prefix="/api/practice")
-
     app.register_blueprint(question_bank_bp, url_prefix="/api/db/question_bank")
+    app.register_blueprint(report_bp, url_prefix="/api/report")
+
     # app.register_blueprint(other_bp, url_prefix='/api/other')
 
     return app

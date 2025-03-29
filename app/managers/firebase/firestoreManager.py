@@ -42,7 +42,7 @@ class FirestoreManager:
         else:
             print("adding")
             doc_ref = self.db.collection(collection_name).add(document_data)
-            return {"success": True, "document_id": doc_ref[1].id}
+            return {"success": True, "document_id": doc_ref[1].id, "document_ref": doc_ref[1].get().to_dict()}
 
     # 批量添加文檔
     def batch_add_documents(self, collection_name: str, documents: List[Dict[str, Any]]):

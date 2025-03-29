@@ -216,6 +216,7 @@ def solve_math_problem_agent(latex_equation, topic):
         Topic: {topic}
         
         Content Optimization:
+        - 每個步驟必須包含題目的所有變量和項，步驟不應只顯示計算過程的某各部分。
         - 每個步驟只需要跟隨返回的那樣，不要只顯示修改的部分
         - 每個步驟需要提及使用了什麼rule，和具體的步驟
         - 最後的2個步驟算式如果相同，請移除一個
@@ -224,6 +225,7 @@ def solve_math_problem_agent(latex_equation, topic):
         - Latex語法必須包裹在`$`符號內
         - 最後的輸出必須將解釋性句子和數學表達式之間用latex換行,如：text... $$<math_equation>$$
         - display new line with slash between `=` text and equal sign with math statement
+        - keep escape char
         
         dont add text and prefix like: ```json and ```
         use following structure to output:

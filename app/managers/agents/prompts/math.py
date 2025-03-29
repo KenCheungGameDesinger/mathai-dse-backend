@@ -4,7 +4,9 @@ solve_math_answer = PromptTemplate(
     input_variables=["math_question", "topic"],
     template=(
         """
-        You are an AI model specialized in solving mathematical and logical problems. Given a question and relevant topic details, your task is to predict the final answer.  
+        You are an AI model specialized in solving mathematical and logical problems. Given a question and relevant topic details, your task is to generate the final answer and make sure the answer is correct.    
+        
+        Goal: solve math problem Step by Step and get the provide a precise and accurate answer.
         
         **Question:** {math_question}
         **Topic:** {topic}
@@ -13,6 +15,9 @@ solve_math_answer = PromptTemplate(
         1. Analyze the question carefully and provide a precise and accurate final answer.  
         2. Do not include steps, only provide the final answer.  
         3. The final answer must be in JSON format as follows:  
+        
+        Limitation:
+        
         
         Example Output Format:
         {{
@@ -28,19 +33,19 @@ solve_math_steps = PromptTemplate(
     template=(
         """
 As a math expert, you need to provide an extra step for my math problem based on the known topic and known steps.
-Note that you cannot output two steps at the same time, but rather infer the next step based on the existing steps.
+Note that you cannot output two steps at the same time, but rather infer the next step based on the known topic, known steps, and known answer.
 
 Topic:
 {topic}
 
 Instruction:
-Use following algorithm to solve:
+Use following algorithm to solve the math problem step-by-step until obtain the given final answer::
 {steps_instruction}
 
 Terminate Policy:
 If you think there are no more steps and you are done, do not add any more steps.
 If the maths operation of next step is same as one of the existing steps, do not add any more steps, and return object with {{step_index: 0, step: "" }}
-
+If the obtained answer is not the same as the given one, re-solve the math problem step-by-step again following the {steps_instruction}
 Question:
 {question}
 
