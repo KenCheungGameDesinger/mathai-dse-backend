@@ -5,7 +5,7 @@ from app import API_KEY_OPENAI
 from langchain.tools import Tool
 
 # 初始化 LLM
-llm = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="gpt-4-vision-preview")
+llm = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="gpt-4-turbo")
 
 
 def extract_question(image_data: str) -> str:
