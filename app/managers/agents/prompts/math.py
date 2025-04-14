@@ -1,7 +1,7 @@
 from langchain.prompts import PromptTemplate
 
 solve_math_answer = PromptTemplate(
-    input_variables=["math_question", "topic"],
+    input_variables=["math_question", "topic", "similar_question"],
     template=(
         """
         You are an AI model specialized in solving mathematical and logical problems. Given a question and relevant topic details, your task is to generate the final answer and make sure the answer is correct.    
@@ -24,12 +24,15 @@ solve_math_answer = PromptTemplate(
           "final_answer": "<your answer here>"
         }}
         
+        Similar Questions you can follow the operations:
+        {similar_question}
+        
         """
     )
 )
 
 solve_math_steps = PromptTemplate(
-    input_variables=["topic", "steps_instruction", "question", "final_answer", "steps"],
+    input_variables=["topic", "steps_instruction", "question", "final_answer", "steps", "similar_question"],
     template=(
         """
 As a math expert, you need to provide an extra step for my math problem based on the known topic and known steps.
@@ -39,7 +42,7 @@ Topic:
 {topic}
 
 Instruction:
-Use following algorithm to solve the math problem step-by-step until obtain the given final answer::
+Use following algorithm to solve the math problem step-by-step until obtain the given final answer with refer the steps from similar question:
 {steps_instruction}
 
 Terminate Policy:
@@ -58,8 +61,11 @@ existing steps:
 Output Format:
 {{
     "step_index": int,
-    "step:": str
+    "step": str
 }}
+
+Similar Questions you can follow the operations:
+{similar_question}
         """
     )
 )

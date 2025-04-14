@@ -1,6 +1,8 @@
+from langchain.memory import VectorStoreRetrieverMemory
 from langchain_community.chat_models import ChatOpenAI
 from langchain.agents import initialize_agent, AgentType
 from app.managers.agents.tools import tool_list
+from app.managers.agents.tools.maths.math import _vectorstore
 
 from app import API_KEY_OPENAI
 
@@ -21,7 +23,7 @@ system_prompt = """
 通過`convert_to_latex`將照片數據中的所有有關數學題目內容轉化為純文字。無需返回JSON。
 
 提供解決步驟和答案
-接收題目，並將題目傳送到`solve_math`逐步解題並提供答案，然後交給`convert_to_latex`將數學表達式轉換為有效格式。最後按照用戶要求輸出指定JSON格式。
+接收題目，並將題目傳送到`solve_math`逐步解題並提供答案，然後交給`convert_to_latex`將數學表達式轉換為有效格式。最後通過memory中的相似問題進行類似的回答，按照用戶要求輸出指定JSON格式。
 
 批改學生解題步驟，給出評價包括如何修改
 通過`evaluate_math`對學生的作答進行批改，在錯的步驟上提供正確步驟並提供解釋。然後通過交給`convert_to_latex`將數學表達式轉換為有效格式。最後按照用戶要求輸出指定JSON格式。
@@ -29,11 +31,14 @@ system_prompt = """
 通常數學問題會是中小學程度，你還需要在有需要的時候根據學校的偏好提供特定的解題步驟，因為每個學校的解題偏好都不一樣。
 """
 
+retriever = _vectorstore.as_retriever()
+vector_memory = VectorStoreRetrieverMemory(retriever=retriever)
+
 math_agent = initialize_agent(
     tools=tool_list,
     llm=llm_agent,
     agent=AgentType.OPENAI_MULTI_FUNCTIONS,
     verbose=True,
     system_prompt=system_prompt,
-    # memory=chat_memory
+    memory=vector_memory
 )
