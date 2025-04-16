@@ -2,7 +2,7 @@ from langchain.memory import VectorStoreRetrieverMemory
 from langchain_community.chat_models import ChatOpenAI
 from langchain.agents import initialize_agent, AgentType
 from app.managers.agents.tools import tool_list
-from app.managers.agents.tools.maths.math import _vectorstore
+from app.managers.agents.tools.maths.math import _vectorstore_mathExample
 
 from app import API_KEY_OPENAI
 
@@ -31,7 +31,7 @@ system_prompt = """
 通常數學問題會是中小學程度，你還需要在有需要的時候根據學校的偏好提供特定的解題步驟，因為每個學校的解題偏好都不一樣。
 """
 
-retriever = _vectorstore.as_retriever()
+retriever = _vectorstore_mathExample.as_retriever()
 vector_memory = VectorStoreRetrieverMemory(retriever=retriever)
 
 math_agent = initialize_agent(

@@ -36,3 +36,20 @@ def download_solution_error_report():
         return jsonify(documents), 200
     except Exception as e:
         return jsonify({"error": str(e)}), 500
+
+
+@report_bp.route("/solution-error/annotate-all", methods=["POST"])
+def annotate_all_solution_error():
+    try:
+        documents = db_instance.db.collection("maths/maintenance/report/solution/pending").stream()
+        for document in documents:
+            doc_id = document.id
+
+            # 更新 status 字段为 'annotated'
+            db_instance.db.collection("maths/maintenance/report/solution/pending").document(doc_id).update({
+                "status": "annotated",
+            })
+
+        return jsonify({"message": "All solution error annotated successfully"}), 200
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500

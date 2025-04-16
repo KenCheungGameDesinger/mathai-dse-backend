@@ -18,10 +18,10 @@ from app.managers.RAG.retriever import retrieve_examples
 # llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="o3-mini", temperature=1)
 # llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI, model_name="ft:gpt-4o-2024-08-06:exmersive:solve-steps:B8rhf1lw", temperature=0.1)
 llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI,
-                           model_name="ft:gpt-4o-2024-08-06:exmersive:solution-separate:BDyrFobg", temperature=0)
+                           model_name="ft:gpt-4o-2024-08-06:exmersive:soln-wellaround:BMSGlkkQ", temperature=0.1)
 
-_vectorstore = build_vectorstore(["app/managers/RAG/docs/Law of index_example_1-20 variation.docx"],
-                                 OpenAIEmbeddings(model="text-embedding-3-large"))
+_vectorstore_mathExample = build_vectorstore(["app/managers/RAG/docs/Law of index_example_1-20 variation.docx"],
+                                             OpenAIEmbeddings(model="text-embedding-3-large"))
 
 
 # region solve solution
@@ -32,7 +32,7 @@ def solve_math(topic: str, question: str, steps_instruction: Optional[str] = "No
     print("in solve_math")
 
     # TODO: get similar question
-    similar_question = retrieve_examples(question, _vectorstore)
+    similar_question = retrieve_examples(question, _vectorstore_mathExample)
     # print("similar_question", similar_question[0])
     answer_prompt = math.solve_math_answer.format(math_question=question, topic=topic,
                                                   similar_question=similar_question)
