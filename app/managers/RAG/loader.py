@@ -1,3 +1,5 @@
+import logging
+
 from langchain.document_loaders.base import BaseLoader
 from langchain.schema import Document as LCDocument
 import re
@@ -33,5 +35,5 @@ class QuestionsDocxWithLatexLoader(BaseLoader):
 
     def load(self):
         doc = self._split_docx_by_question(self.file_path, self.file_path.split("/")[-1])
-
+        print("loaded docs:",doc)
         return doc

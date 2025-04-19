@@ -15,9 +15,13 @@ from pydantic import BaseModel
 from app.managers.RAG.vectorstore import build_vectorstore
 from app.managers.RAG.retriever import retrieve_examples
 
-mathExampleDocs = ["app/managers/RAG/docs/Law of index_example_1-40 base.docx",
-                   "app/managers/RAG/docs/Law of index_example_1-20 variation.docx",
-                   "app/managers/RAG/docs/Law of index algo.docx"]
+mathExampleDocs = [
+    "app/managers/RAG/docs/Law of index algo.docx",
+    "app/managers/RAG/docs/Law of index_example_1-20 *5variation.docx",
+    "app/managers/RAG/docs/Law of index_example_1-40 base.docx",
+    "app/managers/RAG/docs/Law of index_example_21-40 *5variation.docx",
+]
+
 llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI,
                            model_name="ft:gpt-4o-2024-08-06:exmersive:soln-wellaround:BMSGlkkQ", temperature=0.1)
 
