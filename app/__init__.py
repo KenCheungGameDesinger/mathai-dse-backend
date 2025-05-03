@@ -6,7 +6,6 @@ from openai import OpenAI
 
 from app.managers.firebase.firestoreManager import db_instance
 from app.routes.report_routes import report_bp
-from app.utils.cache_controller import init_scheduler
 
 API_KEY_DEEPSEEK = os.getenv("DEEPSEEK_API_KEY")
 API_KEY_OPENAI = os.getenv("OPENAI_API_KEY")
@@ -23,7 +22,6 @@ def create_app():
     app.config.from_object('app.config.Config')
     app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 限制為 20MB
 
-    init_scheduler(app)
     # 註冊藍圖
 
     from .routes.ocr_routes import ocr_bp
