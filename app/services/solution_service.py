@@ -221,6 +221,9 @@ def solve_math_problem_agent(latex_equation, topic):
         - 每個步驟需要提及使用了什麼rule，和具體的步驟
         - 最後的2個步驟算式如果相同，請移除一個
         
+        Check your steps:
+        - extract every operation of number from each steps, and use tool `python_code_runner` python program to compare with the result, make sure the steps are correct
+        
         Latex Optimization:
         - Latex語法必須包裹在`$`符號內
         - 最後的輸出必須將解釋性句子和數學表達式之間用latex換行,如：text... $$<math_equation>$$
@@ -233,11 +236,17 @@ def solve_math_problem_agent(latex_equation, topic):
             final_answer: string;
             steps: List[str]  # assuming text of step is not wrapped by LaTeX yet, it is just pure text. So dont put `\\n` outside $<latex>$
         }}
+        
+        Function calling example:
+        - `solve_math` get steps and final answer
+        - `python_code_runner` python program to check if steps are calculated correctly. to check result, always print the result and show if llm response consist with python calculation.
+        - `convert_to_latex` convert steps to latex in JSON
         """
 
     try:
         response = agent_manager.math_agent.invoke(prompt)
         response_json = json.loads(response["output"])
+        print("type", type(response_json))
         return response_json
     except Exception as e:
         print(e)

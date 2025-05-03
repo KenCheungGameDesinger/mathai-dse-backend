@@ -33,7 +33,7 @@ def create_app():
     from .routes.solution_routes import solution_bp
     from .routes.database.question_bank_routes import question_bank_bp
 
-    @app.route('/', methods=['GET'])
+    @app.route('/', methods=['GET','POST'])
     def index():
         return 'Connecting...'
 

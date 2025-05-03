@@ -41,7 +41,7 @@ def solve_math(topic: str, question: str, steps_instruction: Optional[str] = "No
     # print("similar_question", similar_question[0])
     answer_prompt = math.solve_math_answer.format(math_question=question, topic=topic,
                                                   similar_question=similar_question)
-
+    print("answer_prompt", answer_prompt)
     final_answer = llm_reasoning.invoke(answer_prompt)
     final_answer = json.loads(json.loads(final_answer.content)).get("final_answer")
     final_answer = final_answer.replace('\x0c', r'\f')

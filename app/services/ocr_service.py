@@ -10,7 +10,6 @@ from app import client_deepseek, client_openai
 from app.managers.agents import agent_manager
 
 
-
 class OCRResponse(BaseModel):
     steps: List[str] = Field(..., description=("List of steps, each with LaTeX formatted"
                                                "Inside the steps:"
@@ -26,7 +25,7 @@ class OCRResponse(BaseModel):
     final_answer: str = Field(..., description="Final answer in LaTeX syntax, e.g. \text{The final answer is 42}")
 
 
-def ocr_questions(image_file):
+def ocr_questions_old(image_file):
     # API_KEY = os.getenv("OPENAI_API_KEY")
     # client = OpenAI(api_key=API_KEY)
     # img = client.images.analyze(url=image_file, feature_types=['text'])
@@ -41,12 +40,13 @@ def ocr_questions(image_file):
                     {
                         "type": "text",
                         "text": (
-                            "Extract the text or mathematical problem from the image in LaTeX format only. "
-                            "Use the following structure: "
-                            "- place the sentence in one line."
-                            "- dont add and prefix or suffix to wrap the sentence in a LaTeX environment."
-                            "Latex should be have single slash."
-                            "- Do not add any explanatory text outside of LaTeX."
+                            "Please recognize the math equation from the uploaded image and tell me the task."
+                            # "Extract the text or mathematical problem from the image in LaTeX format only. "
+                            # "Use the following structure: "
+                            # "- place the sentence in one line."
+                            # "- dont add and prefix or suffix to wrap the sentence in a LaTeX environment."
+                            # "Latex should be have single slash."
+                            # "- Do not add any explanatory text outside of LaTeX."
                         )
                     },
                     {
@@ -64,6 +64,78 @@ def ocr_questions(image_file):
         convert math statement part to validated latex format with text, but dont solve it. dont add additional text.
         keep the instructions text or objectives of math question.
         `{response}`
+
+        Requirement:
+        your response should containt all text and latex.
+        use block mode `$$` containt all the content
+        Example:
+        Simplify <latex> and express the answer...
+        """
+    print("prompt", prompt)
+    response = agent_manager.math_agent.run(prompt)
+    return response
+
+
+def ocr_questions(image_file):
+    # API_KEY = os.getenv("OPENAI_API_KEY")
+    # client = OpenAI(api_key=API_KEY)
+    # img = client.images.analyze(url=image_file, feature_types=['text'])
+
+    # region
+    response_ocr_text = client_openai.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": (
+                            "Please recognize the text from the uploaded image only. Don't include math equation and Latex, but use placeholder for python to replace math equation using {}"
+                        )
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": str(image_file)}
+                    },
+                ],
+            }
+        ],
+    )
+    response_ocr_text = response_ocr_text.choices[0].message.content
+    print("response_ocr_text:", response_ocr_text)
+    response_ocr_math_latex = client_openai.chat.completions.create(
+        model="gpt-4-turbo",
+        messages=[
+            {
+                "role": "user",
+                "content": [
+                    {
+                        "type": "text",
+                        "text": f"""
+                        Recognized Text: {response_ocr_text}
+                        
+                        Please recognize the math formula from the uploaded image only. Don't include the recognized text.
+                        Don't give me any context, I need inline latex math formula to fit in placeholder only.
+                        """
+                    },
+                    {
+                        "type": "image_url",
+                        "image_url": {"url": str(image_file)}
+                    },
+                ],
+            }
+        ],
+    )
+
+    response_ocr_math_latex = response_ocr_math_latex.choices[0].message.content
+    # endregion
+    full_question = response_ocr_text.format(response_ocr_math_latex)
+    print("full_question:", full_question)
+    prompt = f"""
+        convert math statement part to validated latex format with text, but dont solve it. dont add additional text.
+        keep the instructions text or objectives of math question.
+        `{response_ocr_text}`
         
         Requirement:
         your response should containt all text and latex.
@@ -71,9 +143,10 @@ def ocr_questions(image_file):
         Example:
         Simplify <latex> and express the answer...
         """
-    print("prompt",prompt)
-    response = agent_manager.math_agent.run(prompt)
-    return response
+    print("prompt", prompt)
+    # response_ocr_text = agent_manager.math_agent.run(prompt)
+    # return response_ocr_text
+    return full_question
 
 
 # 如果不准確，使用gpt-4o模型

@@ -6,6 +6,8 @@ from app.services.utils import clean_latex
 
 solution_bp = Blueprint("solution", __name__)
 
+# create ping route
+
 
 # 解題接口
 @solution_bp.route("/solve", methods=["POST"])
