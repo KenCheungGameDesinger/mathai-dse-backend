@@ -117,6 +117,9 @@ def ocr_questions(image_file):
                         
                         Please recognize the math formula from the uploaded image only. Don't include the recognized text.
                         Don't give me any context, I need inline latex math formula to fit in placeholder only.
+                        
+                        Example:
+                        this is a {{}} equation.
                         """
                     },
                     {

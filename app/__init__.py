@@ -6,6 +6,7 @@ from openai import OpenAI
 
 from app.managers.firebase.firestoreManager import db_instance
 from app.routes.report_routes import report_bp
+from app.utils.cache_controller import init_scheduler
 
 API_KEY_DEEPSEEK = os.getenv("DEEPSEEK_API_KEY")
 API_KEY_OPENAI = os.getenv("OPENAI_API_KEY")
@@ -22,10 +23,7 @@ def create_app():
     app.config.from_object('app.config.Config')
     app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 限制為 20MB
 
-    # print(db_instance.add_document("users", {"name": "Alice", "age": 25, "email": "alice@example.com"}, "user_1"))
-
-    # print("key", app.config['OPENAI_API_KEY'])
-    # print("key", os.getenv('OPENAI_API_KEY'))
+    init_scheduler(app)
     # 註冊藍圖
 
     from .routes.ocr_routes import ocr_bp
@@ -33,11 +31,12 @@ def create_app():
     from .routes.solution_routes import solution_bp
     from .routes.database.question_bank_routes import question_bank_bp
 
-    @app.route('/', methods=['GET','POST'])
+    @app.route('/', methods=['GET', 'POST'])
     def index():
-        return 'Connecting...'
+        return
 
-    # app.register_blueprint(image_blueprint, url_prefix="/api/image")
+        # app.register_blueprint(image_blueprint, url_prefix="/api/image")
+
     app.register_blueprint(ocr_bp, url_prefix="/api/ocr")
     app.register_blueprint(solution_bp, url_prefix="/api/solution")
     app.register_blueprint(practice_bp, url_prefix="/api/practice")

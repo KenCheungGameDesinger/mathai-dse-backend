@@ -4,6 +4,7 @@ import os
 from flask import Blueprint, request, jsonify
 from app.services.ocr_service import ocr_questions, ocr_answers
 from app.services.question_bank_service import match_topic
+from app.utils.cache_controller import save_image_to_cache
 
 ocr_bp = Blueprint('ocr', __name__)
 
@@ -19,8 +20,24 @@ def ping():
 @ocr_bp.route("/extract", methods=["POST"])
 def extract():
     try:
-        file = request.json.get("image_data", "")
+        content_type = request.content_type or ''
+        if content_type.startswith('application/json'):
+            file = request.json.get("image_data", "")
+        elif content_type.startswith('multipart/form-data'):
+            # 處理文件
+            file = request.files.get("image_data")
+            # url = save_image_to_cache(file)
+
+            file_bytes = file.read()
+
+            # 編碼為 base64 字串
+            base64_str = base64.b64encode(file_bytes).decode('utf-8')
+
+            # 可選：加上 MIME type 前綴（Data URI）
+            mime_type = file.mimetype  # 如 'image/png' 或 'image/jpeg'
+            file = f"data:{mime_type};base64,{base64_str}"
         if (file == ""):
+            print("No image data provided")
             return jsonify({"success": False, "error": "image_data: No image data provided."}), 400
 
         # if "," in file:
