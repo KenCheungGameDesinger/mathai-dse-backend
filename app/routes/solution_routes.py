@@ -1,4 +1,7 @@
 from flask import Blueprint, request, jsonify
+from langchain_community.chat_models import ChatOpenAI
+
+from app import API_KEY_OPENAI
 from app.services.solution_service import solve_math_problem_deepseek, solve_math_problem_agent, \
     solve_math_problem_openai, \
     evaluate_student_answer_openai, evaluate_student_answer_deepseek, evaluate_student_answer_agent
@@ -6,8 +9,17 @@ from app.services.utils import clean_latex
 
 solution_bp = Blueprint("solution", __name__)
 
-# create ping route
+llm_reasoning = ChatOpenAI(openai_api_key=API_KEY_OPENAI,
+                           model_name="ft:gpt-4o-2024-08-06:exmersive:soln-wellaround:BMSGlkkQ", temperature=0.1)
 
+# create ping route
+@solution_bp.route("/ping", methods=["GET"])
+def ping():
+    try:
+        response = llm_reasoning.invoke("Ping")
+        return jsonify({"success": True, "response": response.content}), 200
+    except Exception as e:
+        return jsonify({"success": False, "error": str(e)}), 500
 
 # 解題接口
 @solution_bp.route("/solve", methods=["POST"])

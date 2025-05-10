@@ -31,7 +31,7 @@ def create_app():
 
     @app.route('/', methods=['GET', 'POST'])
     def index():
-        return
+        return 'Connecting...'
 
         # app.register_blueprint(image_blueprint, url_prefix="/api/image")
 

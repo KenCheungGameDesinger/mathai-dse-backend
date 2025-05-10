@@ -6,3 +6,4 @@ service_account_key_metamersive.json
 .elasticbeanstalk/*
 !.elasticbeanstalk/*.cfg.yml
 !.elasticbeanstalk/*.global.yml
+/data/faiss_index

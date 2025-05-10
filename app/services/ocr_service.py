@@ -135,18 +135,18 @@ def ocr_questions(image_file):
     # endregion
     full_question = response_ocr_text.format(response_ocr_math_latex)
     print("full_question:", full_question)
-    prompt = f"""
-        convert math statement part to validated latex format with text, but dont solve it. dont add additional text.
-        keep the instructions text or objectives of math question.
-        `{response_ocr_text}`
-        
-        Requirement:
-        your response should containt all text and latex.
-        use block mode `$$` containt all the content
-        Example:
-        Simplify <latex> and express the answer...
-        """
-    print("prompt", prompt)
+    # prompt = f"""
+    #     convert math statement part to validated latex format with text, but dont solve it. dont add additional text.
+    #     keep the instructions text or objectives of math question.
+    #     `{response_ocr_text}`
+    #
+    #     Requirement:
+    #     your response should containt all text and latex.
+    #     use block mode `$$` containt all the content
+    #     Example:
+    #     Simplify <latex> and express the answer...
+    #     """
+    # print("prompt" ,prompt)
     # response_ocr_text = agent_manager.math_agent.run(prompt)
     # return response_ocr_text
     return full_question
